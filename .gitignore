@@ -1,0 +1,30 @@
+# Dependencies / build
+node_modules/
+.next/
+out/
+*.tsbuildinfo
+
+# Env
+.env
+.env.local
+.env*.local
+
+# OS
+.DS_Store
+
+# ---------------------------------------------------------------------------
+# RAW CLIENT PHOTOS — deliberately excluded, do not remove this rule.
+#
+# This repository is PUBLIC. The originals in "Trystan Photos/" are full-resolution
+# 4032px HEIC files straight off Trystan's phone. IMG_7034.heic contains a legible
+# carrier shipping label (barcode, routing block, address text) belonging to a real
+# customer. Committing these publishes that to the open internet and bakes it into
+# git history, where removing it later means a history rewrite.
+#
+# The PROCESSED, downscaled, cropped WebP files that the site actually serves live in
+# public/photos/ and ARE committed — but only after the IMG_7034 label region is
+# cropped out during Phase 1 processing. See seo/PHOTO-INVENTORY.md §3.
+#
+# If this repo is ever made private, this rule can be revisited.
+# ---------------------------------------------------------------------------
+Trystan Photos/
