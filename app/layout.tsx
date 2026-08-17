@@ -1,0 +1,58 @@
+import type { Metadata, Viewport } from "next";
+import { Anton, Barlow } from "next/font/google";
+import "./globals.css";
+
+/**
+ * GO-LIVE GUARD — do not remove this import, and do not move it below the others.
+ *
+ * lib/require-live-config.ts throws at module scope when site.config.ts still has an
+ * empty crm.businessSlug and NEXT_PUBLIC_DEMO_MODE is not 'true'. The root layout is
+ * evaluated for every route during `next build`, so importing it here means the check
+ * always runs and cannot be tree-shaken out. This is what makes shipping the demo
+ * configuration to a real domain physically impossible.
+ */
+import "@/lib/require-live-config";
+
+import { site } from "@/site.config";
+import Analytics from "@/components/Analytics";
+import MobileCtaBar from "@/components/MobileCtaBar";
+
+/** Condensed and heavy — meant to read like it was stencilled on the side of a trailer. */
+const display = Anton({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-display",
+  display: "swap",
+});
+
+const body = Barlow({
+  weight: ["400", "500", "600", "700"],
+  subsets: ["latin"],
+  variable: "--font-body",
+  display: "swap",
+});
+
+export const metadata: Metadata = {
+  metadataBase: new URL(site.seo.url),
+  title: site.seo.pages.home.title,
+  description: site.seo.pages.home.description,
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  // Zoom is never disabled.
+  themeColor: "#0B0B0C",
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en" className={`${display.variable} ${body.variable}`}>
+      <body className="page-shell">
+        {children}
+        <MobileCtaBar />
+        <Analytics />
+      </body>
+    </html>
+  );
+}

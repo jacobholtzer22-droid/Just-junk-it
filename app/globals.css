@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-ink font-body text-paper antialiased;
+  }
+  /* Nothing on this site may scroll sideways at any width from 320px up. */
+  html,
+  body {
+    overflow-x: hidden;
+  }
+  h1,
+  h2,
+  h3 {
+    @apply font-display uppercase;
+  }
+  :focus-visible {
+    @apply outline outline-[3px] outline-offset-2 outline-accent;
+  }
+}
+
+@layer components {
+  /*
+    The one accent-coloured control on the site. Black text on safety yellow measures
+    ~14.9:1. Min height 56px clears the 44px touch target with room for gloves.
+  */
+  .btn-accent {
+    @apply inline-flex min-h-[56px] items-center justify-center gap-2.5 bg-accent
+           font-display uppercase tracking-wide text-ink transition-colors
+           hover:bg-accent/90 active:bg-accent/80;
+  }
+  .btn-outline {
+    @apply inline-flex min-h-[56px] items-center justify-center gap-2.5 border-2
+           border-paper/30 bg-transparent font-display uppercase tracking-wide
+           text-paper transition-colors hover:border-paper/60;
+  }
+  /* Bottom bar is fixed on every page; this keeps content clear of it. */
+  .page-shell {
+    @apply pb-[76px] md:pb-0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
