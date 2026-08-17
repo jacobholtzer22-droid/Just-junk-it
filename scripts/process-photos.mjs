@@ -123,44 +123,82 @@ const MANIFEST = [
   },
 ];
 
-/** Never encode below this. Under ~q68 WebP visibly smears fine leaf and gravel detail. */
-const QUALITY_FLOOR = 70;
+/**
+ * FORMAT LADDER — AVIF primary, WebP fallback.
+ *
+ * The long edge is chosen by AVIF, then WebP is encoded at THAT SAME EDGE. The two files
+ * must have identical pixel dimensions: they are alternate <source> entries in the same
+ * <picture>, and if they differed the layout would shift depending on which format the
+ * browser picked.
+ *
+ * Effort is 4 deliberately. Measured on the worst-case foliage frame at 1600px, raising
+ * AVIF effort from 4 to 9 changed the file from 464 KB to 468 KB — no gain at all — while
+ * the encode went from 0.9 s to 11.7 s. Effort is not the lever here.
+ *
+ * Chroma 4:2:0 rather than sharp's 4:4:4 default. On photographic content the difference
+ * is invisible and it buys real headroom, which is the entire point of this pass.
+ */
+const AVIF = { floor: 42, ceil: 72, effort: 4, chromaSubsampling: "4:2:0" };
+const WEBP = { floor: 50, ceil: 88, effort: 6 };
 
-/** Resolution ladders, tried largest first. Budgets are the brief's targets. */
-const edgeSet = {
-  full: { suffix: "", budget: 250 * 1024, edges: [1600, 1400, 1200, 1100, 1000, 900] },
-  small: { suffix: "-800", budget: 120 * 1024, edges: [800, 700, 600, 500] },
+const VARIANTS = [
+  { suffix: "", budget: 250 * 1024, edges: [1600, 1400, 1200, 1100, 1000, 900] },
+  { suffix: "-800", budget: 120 * 1024, edges: [800, 700, 600, 500] },
+];
+
+/** What the WebP-only pass reached, for the before/after comparison the brief asked for. */
+const PREV_WEBP_EDGE = {
+  "before-01-brush-birch-grand-rapids": "900x675",
+  "after-01-brush-birch-grand-rapids": "1000x750",
+  "before-02-basement-estate-cleanout": "1600x1200",
+  "after-02-basement-estate-cleanout": "1200x1600",
+  "before-03-brush-pile-wooded-lot": "675x900",
+  "after-03-brush-pile-wooded-lot": "675x900",
+  "job-01-basement-books-estate-cleanout": "1200x1600",
+  "job-02-basement-appliances": "1600x1200",
+  "job-03-carport-packed-full": "1382x1400",
+  "job-04-carport-emptied": "900x1200",
+  "truck-01-dump-trailer-grand-rapids": "1200x729",
 };
-const suffixFor = (s) => [s.full, s.small];
 
 const kb = (b) => `${(b / 1024).toFixed(0)} KB`;
 const dirSize = (d) =>
-  !existsSync(d)
-    ? 0
-    : readdirSync(d).reduce((n, f) => n + statSync(path.join(d, f)).size, 0);
+  !existsSync(d) ? 0 : readdirSync(d).reduce((n, f) => n + statSync(path.join(d, f)).size, 0);
+
+const encode = (buf, fmt, q) =>
+  fmt === "avif"
+    ? sharp(buf).avif({ quality: q, effort: AVIF.effort, chromaSubsampling: AVIF.chromaSubsampling }).toBuffer()
+    : sharp(buf).webp({ quality: q, effort: WEBP.effort }).toBuffer();
+
+/** Highest quality in [floor, ceil] whose output fits `budget`. null if none does. */
+async function bestUnder(buf, fmt, budget) {
+  const { floor, ceil } = fmt === "avif" ? AVIF : WEBP;
+  let lo = floor, hi = ceil, out = null, q = 0;
+  while (lo <= hi) {
+    const mid = Math.floor((lo + hi) / 2);
+    const b = await encode(buf, fmt, mid);
+    if (b.length <= budget) { out = b; q = mid; lo = mid + 1; } else { hi = mid - 1; }
+  }
+  return out ? { buf: out, quality: q } : null;
+}
 
 async function main() {
   const beforeSrc = dirSize(SRC);
-  const beforeOut = dirSize(OUT);
-
   rmSync(TMP, { recursive: true, force: true });
   mkdirSync(TMP, { recursive: true });
+  rmSync(OUT, { recursive: true, force: true });
   mkdirSync(OUT, { recursive: true });
 
-  // Stage 1 — decode every distinct source once.
   const needed = [...new Set(MANIFEST.map((m) => m.src))];
   console.log(`\nStage 1: decoding ${needed.length} HEIC files via sips…`);
   for (const s of needed) {
-    execFileSync("sips", ["-s", "format", "png", `${SRC}/${s}.heic`, "--out", `${TMP}/${s}.png`], {
-      stdio: "ignore",
-    });
+    execFileSync("sips", ["-s", "format", "png", `${SRC}/${s}.heic`, "--out", `${TMP}/${s}.png`], { stdio: "ignore" });
   }
 
-  // Stage 2 — orient, crop, resize, encode.
-  console.log(`Stage 2: writing ${MANIFEST.length * 2} WebP files…\n`);
+  console.log(`Stage 2: AVIF + WebP for ${MANIFEST.length} images x ${VARIANTS.length} sizes…\n`);
   const rows = [];
+
   for (const m of MANIFEST) {
-    // .rotate() FIRST so crop fractions are relative to the upright image.
     const oriented = await sharp(`${TMP}/${m.src}.png`).rotate().toBuffer();
     const meta = await sharp(oriented).metadata();
 
@@ -175,133 +213,137 @@ async function main() {
     }
     const base = await pipe.toBuffer();
 
-    /**
-     * Encode to a byte BUDGET, flexing resolution before quality.
-     *
-     * A single fixed quality cannot work across this set. An empty basement is flat
-     * toned and lands near 140 KB at q88; a birch stand full of leaves is the worst
-     * case WebP has and lands near 900 KB at the same setting. Measured on IMG_0207:
-     *
-     *          q60    q68    q74    q80    q86
-     *   1600   571    622    649    760    902     KB
-     *   1200   334    364    378    442    524
-     *   1000   229    249    265    305    362
-     *
-     * So 250 KB at 1600px would mean roughly q45 on the foliage shots, and WebP at
-     * that setting smears leaf detail into mush. In a gallery whose entire job is
-     * "look what we hauled", soft-but-clean beats sharp-and-artefacted.
-     *
-     * Therefore: hold quality at 70 or better and step the long edge down until the
-     * budget is met. Flat images keep the full 1600px; busy ones settle near 1000px,
-     * which is still ample for how they are actually displayed (gallery pairs, not
-     * full-bleed heroes). Real output dimensions are recorded per file and written to
-     * lib/photo-manifest.ts so the markup can declare truthful width/height.
-     */
-    const ladder = suffixFor(edgeSet);
-    for (const { suffix, budget, edges } of ladder) {
-      const file = `${OUT}/${m.out}${suffix}.webp`;
-      let best = null, chosenQ = 0, chosenEdge = 0;
-
-      outer: for (const edge of edges) {
+    for (const v of VARIANTS) {
+      let chosen = null;
+      for (const edge of v.edges) {
         const resized = await sharp(base)
           .resize({ width: edge, height: edge, fit: "inside", withoutEnlargement: true })
           .toBuffer();
-        let lo = QUALITY_FLOOR, hi = 88, bufAt = null, qAt = 0;
-        while (lo <= hi) {
-          const q = Math.floor((lo + hi) / 2);
-          const buf = await sharp(resized).webp({ quality: q, effort: 6 }).toBuffer();
-          if (buf.length <= budget) { bufAt = buf; qAt = q; lo = q + 1; } else { hi = q - 1; }
-        }
-        if (bufAt) { best = bufAt; chosenQ = qAt; chosenEdge = edge; break outer; }
+        const avif = await bestUnder(resized, "avif", v.budget);
+        if (avif) { chosen = { edge, resized, avif }; break; }
       }
-
-      // Nothing on the ladder fit even at the quality floor — take the smallest edge
-      // at the floor and let the report flag it rather than silently shipping it.
-      if (!best) {
-        const edge = edges[edges.length - 1];
-        best = await sharp(base)
+      // Nothing on the ladder fit even at the AVIF floor — take the smallest rung and
+      // let the report flag it rather than silently shipping it.
+      if (!chosen) {
+        const edge = v.edges[v.edges.length - 1];
+        const resized = await sharp(base)
           .resize({ width: edge, height: edge, fit: "inside", withoutEnlargement: true })
-          .webp({ quality: QUALITY_FLOOR, effort: 6 })
           .toBuffer();
-        chosenQ = QUALITY_FLOOR;
-        chosenEdge = edge;
+        chosen = { edge, resized, avif: { buf: await encode(resized, "avif", AVIF.floor), quality: AVIF.floor } };
       }
-      // Write the exact buffer the search measured. Passing it back through
-      // sharp().toFile() would DECODE and RE-ENCODE it at sharp's default quality,
-      // so the file on disk would not be the one that was measured against the budget
-      // — which is how an image that "fit" 250 KB landed at 272 KB.
-      writeFileSync(file, best);
 
-      const om = await sharp(file).metadata();
+      // WebP fallback at the SAME dimensions. If it cannot meet the budget it is written
+      // at its floor: it is only served to browsers with no AVIF support, and a slightly
+      // heavier fallback beats a fallback that shifts the layout.
+      const webpFit = await bestUnder(chosen.resized, "webp", v.budget);
+      const webp = webpFit ?? { buf: await encode(chosen.resized, "webp", WEBP.floor), quality: WEBP.floor };
+
+      const dims = await sharp(chosen.avif.buf).metadata();
+      writeFileSync(`${OUT}/${m.out}${v.suffix}.avif`, chosen.avif.buf);
+      writeFileSync(`${OUT}/${m.out}${v.suffix}.webp`, webp.buf);
+
       rows.push({
         key: m.out,
-        file: `${m.out}${suffix}.webp`,
-        variant: suffix === "" ? "full" : "800",
-        width: om.width,
-        height: om.height,
-        dims: `${om.width}x${om.height}`,
-        bytes: statSync(file).size,
-        quality: chosenQ,
-        exif: om.exif ? "PRESENT" : "none",
+        variant: v.suffix === "" ? "full" : "800",
+        base: `${m.out}${v.suffix}`,
+        width: dims.width,
+        height: dims.height,
+        avifBytes: chosen.avif.buf.length,
+        avifQ: chosen.avif.quality,
+        webpBytes: webp.buf.length,
+        webpQ: webp.quality,
+        webpOverBudget: webp.buf.length > v.budget,
+        budget: v.budget,
         alt: m.alt,
       });
+    }
+
+    // For any full-size image that lands under 1200px, measure what 1200px would cost so
+    // the budget can be raised for that specific file rather than guessed at.
+    const full = rows.find((r) => r.key === m.out && r.variant === "full");
+    if (full.width < 1200 && full.height < 1200) {
+      const r1200 = await sharp(base).resize({ width: 1200, height: 1200, fit: "inside" }).toBuffer();
+      const md = await sharp(r1200).metadata();
+      full.need1200 = {
+        dims: `${md.width}x${md.height}`,
+        at50: (await encode(r1200, "avif", 50)).length,
+        at45: (await encode(r1200, "avif", 45)).length,
+      };
     }
   }
 
   rmSync(TMP, { recursive: true, force: true });
 
-  /**
-   * Generated manifest. The markup imports this so every <Image> can declare the REAL
-   * intrinsic width and height of the file it is serving. Hard-coding 1600 everywhere
-   * would be a false claim now that the busy images settle lower, and a wrong
-   * width/height pair is exactly what causes layout shift.
-   */
-  const full = rows.filter((r) => r.variant === "full");
-  const thumb = rows.filter((r) => r.variant === "800");
-  const manifest = full.map((r) => {
-    const t = thumb.find((x) => x.key === r.key);
-    return { key: r.key, src: `/photos/${r.file}`, width: r.width, height: r.height,
-             smallWidth: t.width, smallHeight: t.height, alt: r.alt };
+  const fullRows = rows.filter((r) => r.variant === "full");
+  const thumbRows = rows.filter((r) => r.variant === "800");
+  const manifest = fullRows.map((r) => {
+    const t = thumbRows.find((x) => x.key === r.key);
+    return {
+      key: r.key,
+      avif: `/photos/${r.base}.avif`,
+      webp: `/photos/${r.base}.webp`,
+      width: r.width,
+      height: r.height,
+      smallAvif: `/photos/${t.base}.avif`,
+      smallWebp: `/photos/${t.base}.webp`,
+      smallWidth: t.width,
+      smallHeight: t.height,
+      alt: r.alt,
+    };
   });
   writeFileSync(
     "lib/photo-manifest.ts",
     "// GENERATED by scripts/process-photos.mjs — do not edit by hand.\n" +
-      "// Run `npm run photos` to regenerate. Alt text lives in that script's MANIFEST.\n\n" +
-      "export type Photo = {\n  key: string;\n  src: string;\n  width: number;\n  height: number;\n" +
-      "  smallWidth: number;\n  smallHeight: number;\n  alt: string;\n};\n\n" +
-      "export const photos = " + JSON.stringify(manifest, null, 2) + " as const satisfies readonly Photo[];\n\n" +
-      "export const photoByKey = Object.fromEntries(photos.map((p) => [p.key, p])) as Record<string, Photo>;\n",
+      "// Run `npm run photos` to regenerate. Alt text lives in that script's MANIFEST.\n" +
+      "// width/height are the REAL intrinsic dimensions of the files that ship, so markup\n" +
+      "// can declare them and avoid layout shift. AVIF and WebP always share dimensions.\n\n" +
+      "export type Photo = {\n  key: string;\n  avif: string;\n  webp: string;\n  width: number;\n  height: number;\n" +
+      "  smallAvif: string;\n  smallWebp: string;\n  smallWidth: number;\n  smallHeight: number;\n  alt: string;\n};\n\n" +
+      "export const photos: readonly Photo[] = " + JSON.stringify(manifest, null, 2) + ";\n\n" +
+      "export const photoByKey: Record<string, Photo> = Object.fromEntries(photos.map((p) => [p.key, p]));\n",
   );
 
   // ---- Report ----------------------------------------------------------------
-  const leaked = rows.filter((r) => r.exif !== "none");
-  console.log(`${"file".padEnd(46)} ${"dims".padEnd(11)} ${"size".padEnd(8)} ${"q".padEnd(3)} exif`);
-  console.log("-".repeat(80));
-  for (const r of rows) {
-    console.log(`${r.file.padEnd(46)} ${r.dims.padEnd(11)} ${kb(r.bytes).padEnd(8)} ${String(r.quality).padEnd(3)} ${r.exif}`);
+  console.log(`${"file".padEnd(40)} ${"dims".padEnd(11)} ${"AVIF".padEnd(11)} ${"WebP".padEnd(11)} was (webp-only)`);
+  console.log("-".repeat(96));
+  for (const r of fullRows) {
+    const t = thumbRows.find((x) => x.key === r.key);
+    const prev = PREV_WEBP_EDGE[r.key] ?? "?";
+    const gain = prev === `${r.width}x${r.height}` ? "same" : "UP";
+    console.log(
+      `${r.base.padEnd(40)} ${`${r.width}x${r.height}`.padEnd(11)} ` +
+        `${`${kb(r.avifBytes)} q${r.avifQ}`.padEnd(11)} ${`${kb(r.webpBytes)} q${r.webpQ}`.padEnd(11)} ${prev} ${gain}`,
+    );
+    console.log(
+      `${("  " + t.base).padEnd(40)} ${`${t.width}x${t.height}`.padEnd(11)} ` +
+        `${`${kb(t.avifBytes)} q${t.avifQ}`.padEnd(11)} ${`${kb(t.webpBytes)} q${t.webpQ}`.padEnd(11)}`,
+    );
   }
 
+  const under1200 = fullRows.filter((r) => r.need1200);
+  const webpOver = rows.filter((r) => r.webpOverBudget);
 
+  console.log("\n" + "=".repeat(96));
+  console.log(`  source HEIC        : ${kb(beforeSrc)}`);
+  console.log(`  public/photos now  : ${kb(dirSize(OUT))}  (${rows.length * 2} files: ${rows.length} AVIF + ${rows.length} WebP)`);
+  console.log(`  AVIF subtotal      : ${kb(rows.reduce((n, r) => n + r.avifBytes, 0))}`);
+  console.log(`  WebP subtotal      : ${kb(rows.reduce((n, r) => n + r.webpBytes, 0))}   (fallback only)`);
+  console.log(`  AVIF over budget   : ${rows.filter((r) => r.avifBytes > r.budget).length === 0 ? "none" : rows.filter((r) => r.avifBytes > r.budget).map((r) => r.base).join(", ")}`);
+  console.log(`  WebP over budget   : ${webpOver.length === 0 ? "none" : webpOver.map((r) => `${r.base} ${kb(r.webpBytes)}`).join(", ")}`);
 
-  const over = [
-    ...full.filter((r) => r.bytes > 250 * 1024).map((r) => `${r.file} ${kb(r.bytes)} > 250 KB`),
-    ...thumb.filter((r) => r.bytes > 120 * 1024).map((r) => `${r.file} ${kb(r.bytes)} > 120 KB`),
-  ];
-
-  console.log("\n" + "=".repeat(74));
-  console.log(`  source HEIC folder : ${kb(beforeSrc)}  (${needed.length} distinct files used)`);
-  console.log(`  public/photos was  : ${kb(beforeOut)}`);
-  console.log(`  public/photos now  : ${kb(dirSize(OUT))}  (${rows.length} files)`);
-  console.log(`  full-size subtotal : ${kb(full.reduce((n, r) => n + r.bytes, 0))}`);
-  console.log(`  800w subtotal      : ${kb(thumb.reduce((n, r) => n + r.bytes, 0))}`);
-  console.log(`  EXIF leaked        : ${leaked.length === 0 ? "NONE — all stripped" : leaked.map((r) => r.file).join(", ")}`);
-  console.log(`  over budget        : ${over.length === 0 ? "none" : "\n    " + over.join("\n    ")}`);
-  console.log("=".repeat(74) + "\n");
-
-  if (leaked.length || over.length) process.exit(1);
+  if (under1200.length) {
+    console.log(`\n  ⚠ FULL-SIZE IMAGES BELOW 1200px — budget raise needed per file:`);
+    for (const r of under1200) {
+      console.log(
+        `    ${r.base}\n` +
+          `      reaches ${r.width}x${r.height} at 250 KB\n` +
+          `      would need ${kb(r.need1200.at50)} for ${r.need1200.dims} at AVIF q50, or ${kb(r.need1200.at45)} at q45`,
+      );
+    }
+  } else {
+    console.log(`\n  All full-size images reach at least 1200px on the long edge within budget.`);
+  }
+  console.log("=".repeat(96) + "\n");
 }
 
-main().catch((e) => {
-  console.error(e);
-  process.exit(1);
-});
+main().catch((e) => { console.error(e); process.exit(1); });

@@ -183,14 +183,21 @@ export const site = {
   whyUs: [
     {
       heading: "Same Day Service Available",
+      // ⚠ "when we can" is LOAD-BEARING. It is the difference between advertising
+      // availability and making a guarantee we cannot keep. Do not tighten this line.
       body: "Need it gone today? Call us. We make it happen when we can.",
     },
     {
       heading: "Upfront Pricing, No Surprises",
+      // ⚠ PRICING COMMITMENT, not a marketing line. This promises no upcharge after a
+      // quote is given. Carried over verbatim from Trystan's own site; on the owner
+      // sign-off list in HANDOFF.md. Do not restate it more strongly.
       body: "You get a clear quote before we start. What we quote is what you pay.",
     },
     {
       heading: "We Recycle & Donate When Possible",
+      // ⚠ "when we can" is LOAD-BEARING. Without it this becomes an environmental claim
+      // we cannot substantiate. Do not tighten this line.
       body: "Good stuff doesn't always go to the dump. We keep it out of landfills when we can.",
     },
     {

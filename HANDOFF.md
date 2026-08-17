@@ -95,6 +95,7 @@ at Phase 4; these are the ones that already exist in config.
 | "No job too big or too small" | His current site, verbatim | Confirm |
 | Mon–Sat, 7am–7pm | Supplied business facts | Confirm, since it will appear in schema |
 | Free quotes | Build brief trust strip | Confirm |
+| **Permission to publish the job photos** | Photos supplied by Trystan | Routine confirmation that he is OK with these going on a public website. Worth naming specifically: `before-02` / `after-02` and `job-01` are **interiors of a customer's home** during what looks like an estate cleanout. Most owners are happy to show this work — it is the best proof on the site — but it is his customer relationship, so he makes the call. Nothing identifying is visible in any frame: no faces, no house numbers, no mail, no legible labels, all verified. |
 
 ---
 
