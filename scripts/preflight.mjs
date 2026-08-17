@@ -10,9 +10,37 @@
  * failure, not a pass. A config refactor that hides the value must not silently disable
  * the guard.
  */
-import { readFileSync } from "node:fs";
+import { readFileSync, existsSync } from "node:fs";
 
 const FILE = "site.config.ts";
+
+/**
+ * Load .env files the way Next does, because this script is a bare node process and
+ * would otherwise not see them.
+ *
+ * This matters more than it looks. If preflight read only process.env while the layout
+ * guard (which runs inside Next, after Next has loaded .env.local) saw a different
+ * value, the two layers would disagree about whether the build is safe — and a safety
+ * guard whose halves contradict each other is worse than a single guard, because you
+ * stop trusting either.
+ *
+ * Precedence, matching Next: real process.env wins, then .env.local, then .env.
+ */
+function loadEnv() {
+  for (const file of [".env.local", ".env"]) {
+    if (!existsSync(file)) continue;
+    for (const line of readFileSync(file, "utf8").split("\n")) {
+      const m = line.match(/^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)\s*$/);
+      if (!m) continue; // comments and blanks
+      const key = m[1];
+      if (key in process.env) continue; // already set — do not override
+      process.env[key] = m[2].replace(/^["']|["']$/g, "");
+    }
+  }
+}
+
+loadEnv();
+
 const DEMO = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
 
 const rule = "═".repeat(68);
