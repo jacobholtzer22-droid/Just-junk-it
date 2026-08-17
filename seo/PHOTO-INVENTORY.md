@@ -52,6 +52,11 @@ mounted in the same spot on the block wall, same ductwork run, same window place
 visible on the furniture in the before are on the empty floor in the after, which is a
 nice authenticating detail.
 
+> **RESOLVED AT THE GATE.** Pair 03 was rejected and demoted to two standalone gallery
+> images. Pairs 01, 02 and 04 were re-tested against the two-second rule and all three
+> pass; 02 is the weakest of them. Pair 04 was renumbered to 03 in the output filenames
+> since the carport is no longer a pair. Full reasoning in §6 below.
+
 ### PAIR 03 — Portable carport cleanout · **MODERATE**
 `IMG_7034` → `IMG_7101` · **7 days apart**
 **Matching landmarks:** same green fabric shelter, same arched frame ribs, same plywood
@@ -170,3 +175,80 @@ I will not put stock photography or an AI image on any of them.
 
 *Written at the Phase 0 gate. No site code has been written. Nothing here is approved for
 use until you sign off on the pairs above.*
+
+---
+
+## 6. Gate resolution — the two-second test
+
+The bar: *a stranger on a phone, two seconds, no caption, reads it instantly as the same
+spot.* Applied to all four proposed pairs, judged from orientation-normalised composites
+rather than from memory.
+
+### PAIR 03 (carport) — **REJECTED**, demoted to two standalone gallery images
+
+Fails the test outright. The before is shot from **inside** the shelter, with green fabric
+walls filling the entire frame and no exterior reference of any kind. The after is shot
+from **outside**, showing the whole structure against sky, field and treeline. There is no
+shared visual anchor between the two frames — a viewer has to reason their way to "same
+structure" rather than see it.
+
+**On whether anything changed for reasons other than the client hauling it — asked
+directly, answered plainly: I cannot rule it out, and that is disqualifying.**
+
+- The two frames are **seven days apart** (May 1 → May 8), not the same visit.
+- The after contains a **dark object and a small yellow item at the rear of the shelter**
+  that I cannot match to anything in the before, because the before's floor is completely
+  buried and its rear corner is obscured.
+- A **wooden timber lies on the grass outside** the entrance in the after. It is not in the
+  before, though the before shows no exterior at all, so this proves nothing either way.
+- The before shows no floor; the after shows a concrete pad. Whether that pad was always
+  there or was uncovered is unknowable from these two frames.
+
+Seven days is ample time for a homeowner to have moved things themselves. I cannot state
+that the change between these frames is solely Just Junk It's work, so under the standing
+rule it does not appear as proof under any framing. Both images ship as standalone gallery
+photos captioned only as what they are, and they must **not** be placed adjacent in a way
+that implies a pairing.
+
+### PAIR 01 (brush in the birch stand) — **PASSES**
+
+Instant read. The leaning birch trunks are in an identical arrangement, the wooden privacy
+fence runs through the same gap, the ground contour matches. Lighting differs sharply
+(overcast dawn → hard midday sun) but the trees carry it.
+
+*Present in the after and not the before:* the Just Junk It truck and dump trailer at the
+left edge. That is the client's own vehicle mid-haul — corroborating rather than
+confounding. Nothing else changed.
+
+### PAIR 02 (basement estate cleanout) — **PASSES, weakest of the three**
+
+The staircase, its handrail, the pale treads, the fire extinguisher on the block wall, the
+joists and the window placement all match. A basement emptied to bare concrete is an
+unmistakable read.
+
+The honest caveat: **the camera moved substantially** — the before looks across the room
+from beside the stairs, the after looks back toward the stairs from across the room. It
+passes because the staircase is a hard anchor present and prominent in both, but it is not
+as instant as 01 or 04. If you want to ship only two pairs, this is the one to cut.
+
+*Present in the after and not the before:* nothing added. The white lattice shelving unit
+visible in the before is gone, consistent with the cleanout.
+
+### PAIR 04 (brush beside the boat) — **PASSES**, renumbered to 03 in output
+
+The strongest anchors in the whole set. The overturned aluminium boat and the red truck bed
+sit in near-identical positions in both frames, same trees, same framing, same distance.
+Instant read.
+
+*Present in the after and not the before:* a **folded blue tarp** beside the red truck bed,
+and a bicycle wheel intruding at the bottom-left edge. *Absent from the after:* the black
+flatbed trailer at the left, which is the client's own equipment driven off after loading.
+None of that touches the subject — the brush pile is unambiguously gone and it is the only
+thing the caption claims.
+
+Alt text is constrained to brush and yard waste, and explicitly states that the boat and
+truck bed were not part of the job.
+
+### Net result
+
+**Three pairs, four standalones, one honest non-job asset.**

@@ -151,7 +151,7 @@ export const site = {
     h1: `Junk Removal in ${GEO_LEAD}, MN`,
     sub: "You point. We load. It's gone. Junk removal and hauling across Itasca County, run by the guy who shows up.",
     image: {
-      src: "/photos/truck-01-dump-trailer.webp",
+      src: "/photos/truck-01-dump-trailer-grand-rapids.webp",
       alt: "",
       placeholderLabel: "Truck and dump trailer",
     } as SiteImage,
@@ -168,12 +168,40 @@ export const site = {
   ],
 
   /**
-   * TODO — BLOCKED, see HANDOFF.md.
-   * The build prompt calls for "the five points from his current site". His current site
-   * was never supplied. This array stays empty and the "Why Just Junk It" section does
-   * not render until Jacob pastes the real five. Nothing invented to fill the hole.
+   * VERBATIM from Trystan's current site, supplied by Jacob. Do not rewrite, reorder,
+   * reword or add a sixth. These are his own claims carried over, not marketing copy
+   * written by us.
+   *
+   * ⚠ Point 2 is a PRICING COMMITMENT, not a marketing line. "What we quote is what you
+   * pay" is an operational promise the business has to keep. It is on the owner sign-off
+   * list in HANDOFF.md for exactly that reason.
+   *
+   * Points 1 and 3 are both hedged in his original wording ("when we can"). The hedge is
+   * load-bearing — it is the difference between "same day available" and a guarantee, and
+   * between "we recycle" and an environmental claim we cannot substantiate. Keep it.
    */
-  whyUs: [] as { heading: string; body: string }[],
+  whyUs: [
+    {
+      heading: "Same Day Service Available",
+      body: "Need it gone today? Call us. We make it happen when we can.",
+    },
+    {
+      heading: "Upfront Pricing, No Surprises",
+      body: "You get a clear quote before we start. What we quote is what you pay.",
+    },
+    {
+      heading: "We Recycle & Donate When Possible",
+      body: "Good stuff doesn't always go to the dump. We keep it out of landfills when we can.",
+    },
+    {
+      heading: "Locally Owned, Grand Rapids MN",
+      body: "We're your neighbors. We care about doing the job right every time.",
+    },
+    {
+      heading: "No Job Too Big or Too Small",
+      body: "Single item pickup or full property cleanout, we handle both.",
+    },
+  ] as { heading: string; body: string }[],
 
   howItWorks: [
     {

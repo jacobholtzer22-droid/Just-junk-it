@@ -28,3 +28,6 @@ out/
 # If this repo is ever made private, this rule can be revisited.
 # ---------------------------------------------------------------------------
 Trystan Photos/
+
+# Photo pipeline scratch
+.photo-tmp/
