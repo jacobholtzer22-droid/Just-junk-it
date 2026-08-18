@@ -24,11 +24,14 @@ export function pageMetadata(key: PageKey): Metadata {
       siteName: site.seo.siteName,
       type: "website",
       locale: "en_US",
+      // PNG on purpose — link-preview scrapers have patchy WebP/AVIF support.
+      images: [{ url: "/photos/logo-just-junk-it-og.png", width: 1200, height: 630, alt: "Just Junk It logo" }],
     },
     twitter: {
       card: "summary_large_image",
       title: page.title,
       description: page.description,
+      images: ["/photos/logo-just-junk-it-og.png"],
     },
   };
 }

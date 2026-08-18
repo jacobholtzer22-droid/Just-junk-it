@@ -18,7 +18,21 @@ export default function Header() {
   return (
     <header className="border-b-2 border-paper/10 bg-ink">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-4 sm:px-6">
-        <Link href="/" className="-my-2 flex min-h-[44px] items-center py-2 font-display text-2xl uppercase leading-none tracking-tight text-paper sm:text-3xl">
+        {/*
+          Logo image + text wordmark together. The image is DECORATIVE (empty alt): the
+          accessible name is the wordmark text right beside it, so screen readers hear
+          "Just Junk It" once, not twice. Real width/height attrs -> zero layout shift.
+          The lockup's own lettering is too small to read at header size, which is why
+          the wordmark stays — it is the legible name, the logo is the brand mark.
+        */}
+        <Link href="/" className="-my-2 flex min-h-[44px] items-center gap-3 py-2 font-display text-2xl uppercase leading-none tracking-tight text-paper sm:text-3xl">
+          <img
+            src="/photos/logo-just-junk-it.webp"
+            alt=""
+            width={509}
+            height={320}
+            className="h-12 w-auto sm:h-14"
+          />
           Just Junk It
         </Link>
 

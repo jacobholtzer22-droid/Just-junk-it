@@ -72,12 +72,13 @@ effect the moment the slug is non-empty.
 
 ## LOGO — file needed, palette already matched
 
-Trystan's real logo (black field, dark-red banner, white lettering, red diamond border,
-mascot + truck) exists only as an image in the build chat. **The actual file was never
-saved into the project**, so the header still renders a text wordmark.
-
-Drop the logo file into the repo (any of PNG/SVG at decent resolution) and it can go
-into the header and og-image. Until then nothing is broken — the wordmark is deliberate.
+**RESOLVED — Jacob supplied the file** (`Trystan Photos/6C81F79C-…PNG`, 1536×1024).
+`scripts/process-logo.mjs` trims the black margin and emits two committed assets:
+`public/photos/logo-just-junk-it.webp` (header, 2x) and `logo-just-junk-it-og.png`
+(1200×630 link-preview card, PNG because scrapers have patchy WebP support). The header
+shows the logo beside the text wordmark — the image is decorative to screen readers, so
+the name is announced once. Note the ORIGINAL sits in "Trystan Photos/", which is
+gitignored with the job-photo originals; the processed copies are what gets committed.
 
 The site palette was rebuilt from the logo in Aug 2026: accent is the logo's border red
 `#C1272D`, chosen over the deeper banner red (~`#8E1215`) because the deep red measures
