@@ -54,10 +54,12 @@ export default function JunkRemovalPage() {
 
         {/* Full-bleed band, not a card. */}
         <div className="mt-12 max-h-[52vh] overflow-hidden sm:max-h-[60vh]">
+          {/* NOT `priority`. Measured LCP on this page is the H1 text waiting on the
+              Anton webfont, not this image. Eager-loading a non-LCP hero at high priority
+              just takes bandwidth from the thing that actually gates the largest paint. */}
           <Photo
             photoKey={hero.photoKey}
             sizes="100vw"
-            priority
             className="block w-full object-cover"
           />
         </div>
