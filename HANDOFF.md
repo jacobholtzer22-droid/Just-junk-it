@@ -70,6 +70,24 @@ effect the moment the slug is non-empty.
 
 ---
 
+## LOGO — file needed, palette already matched
+
+Trystan's real logo (black field, dark-red banner, white lettering, red diamond border,
+mascot + truck) exists only as an image in the build chat. **The actual file was never
+saved into the project**, so the header still renders a text wordmark.
+
+Drop the logo file into the repo (any of PNG/SVG at decent resolution) and it can go
+into the header and og-image. Until then nothing is broken — the wordmark is deliberate.
+
+The site palette was rebuilt from the logo in Aug 2026: accent is the logo's border red
+`#C1272D`, chosen over the deeper banner red (~`#8E1215`) because the deep red measures
+2.11:1 on the near-black background — illegible. `#C1272D` passes 3:1 for icons/large
+type and carries paper text on buttons at 5.13:1, which is also exactly the logo
+banner's own white-on-red treatment. Errors are amber on purpose so they can never be
+mistaken for red CTAs. Full rules live at the token definitions in `tailwind.config.ts`.
+
+---
+
 ## REVIEWS — three are missing, and why
 
 Seven real Google reviews are live, reproduced **verbatim**: Tom, Lora Budach, Pete,
