@@ -150,11 +150,11 @@ export const site = {
     /** H1. Names the service and the city. */
     h1: `Junk Removal in ${GEO_LEAD}, MN`,
     sub: "You point. We load. It's gone. Junk removal and hauling across Itasca County, run by the guy who shows up.",
-    image: {
-      src: "/photos/truck-01-dump-trailer-grand-rapids.webp",
-      alt: "",
-      placeholderLabel: "Truck and dump trailer",
-    } as SiteImage,
+    /**
+     * Key into lib/photo-manifest.ts. Alt text lives there with the verified copy, so a
+     * page cannot quietly re-describe a photo as something it does not show.
+     */
+    photoKey: "truck-01-dump-trailer-grand-rapids",
   },
 
   /** Three-second trust strip. Nothing here may be a claim we cannot back. */
@@ -240,7 +240,36 @@ export const site = {
 
   gallery: {
     heading: "Before and after",
-    body: "Every photo on this page is a real job in Itasca County. No stock, no staging.",
+    body: "Every photo on this site is a real job in Itasca County. No stock photos, no staging.",
+    /**
+     * The three approved pairs, in the order they appear. Captions are deliberately narrow:
+     * pair 03 says BRUSH, not "junk", because the boat and truck bed visible in both frames
+     * were not part of that job. See seo/PHOTO-INVENTORY.md.
+     */
+    pairs: [
+      {
+        beforeKey: "before-01-brush-birch-grand-rapids",
+        afterKey: "after-01-brush-birch-grand-rapids",
+        caption: "Brush pile cleared from a birch stand in Grand Rapids. Same morning.",
+      },
+      {
+        beforeKey: "before-02-basement-estate-cleanout",
+        afterKey: "after-02-basement-estate-cleanout",
+        caption: "Basement estate cleanout in Grand Rapids, emptied to bare concrete in about an hour.",
+      },
+      {
+        beforeKey: "before-03-brush-pile-wooded-lot",
+        afterKey: "after-03-brush-pile-wooded-lot",
+        caption: "Brush and yard waste hauled off a wooded lot in Itasca County.",
+      },
+    ],
+    /** Standalone job photos. The two carport frames are never shown adjacent. */
+    singles: [
+      "job-03-carport-packed-full",
+      "job-01-basement-books-estate-cleanout",
+      "job-04-carport-emptied",
+      "job-02-basement-appliances",
+    ],
   },
 
   serviceArea: {

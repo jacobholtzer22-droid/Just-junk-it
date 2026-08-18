@@ -1,17 +1,19 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  images: {
-    // Custom loader, NOT the Next image optimizer. It only picks between two files the
-    // photo pipeline generated ahead of time, so the built site carries zero runtime
-    // image-optimizer dependency and every page stays fully static.
-    loader: "custom",
-    loaderFile: "./lib/image-loader.ts",
-    deviceSizes: [800, 1600],
-    // 800 repeats deviceSizes on purpose: Next would otherwise emit a "384w" descriptor
-    // pointing at the 800px file, which is a false width claim.
-    imageSizes: [800],
-  },
+  /**
+   * NO `images` BLOCK ON PURPOSE.
+   *
+   * This site does not use next/image. All photography goes through components/Photo.tsx,
+   * which emits a plain <picture> with pre-generated AVIF and WebP sources and lets the
+   * browser negotiate the format natively.
+   *
+   * The previous custom `loader` config and lib/image-loader.ts were deleted with that
+   * change: with no next/image call sites they configured nothing, and dead config that
+   * implies behaviour which is not happening is worse than no config. For the same reason
+   * `formats: ['image/avif','image/webp']` is absent — that key only drives Next's built-in
+   * optimizer, which this site deliberately does not run.
+   */
 };
 
 export default nextConfig;
