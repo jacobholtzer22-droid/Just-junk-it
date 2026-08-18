@@ -31,3 +31,4 @@ Trystan Photos/
 
 # Photo pipeline scratch
 .photo-tmp/
+.vercel
