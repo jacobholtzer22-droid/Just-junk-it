@@ -52,6 +52,46 @@ effect the moment the slug is non-empty.
 
 ---
 
+## REVIEWS — three are missing, and why
+
+Seven real Google reviews are live, reproduced **verbatim**: Tom, Lora Budach, Pete,
+Vickie Ekstedt, Christina, Patrice Curtiss, Judith Young. All five stars, confirmed.
+
+Two spell the owner's name "Tristan" rather than "Trystan", and Vickie's has a missing
+apostrophe in "Im". **Left exactly as written.** A tidied review is a fabricated one, and
+the wording is checkable against the live Google listing.
+
+**Three are deliberately excluded** because the source paste truncated them with "… More",
+so their full text is unknown. Publishing a review that stops mid-thought misrepresents
+what the person wrote. Grab the untruncated text from the Google listing and they can go in:
+
+| Reviewer | Why it is worth getting | What it covers |
+|---|---|---|
+| **Tiffany Jenniges** | The strongest one in the set — a big land-clearing job with old campers, a tractor and years of piled garbage, taken over after another contractor made a mess of it | Land clearing, large-scale hauling |
+| **Courtney Eden** | Fridge removal on a house move into Grand Rapids, praises text response speed | Appliance removal |
+| **Stir Frei** | Furniture removal | Furniture removal |
+
+**One name needs checking: "Tom".** His display name was not in the paste — the only place
+the name appears is Trystan's own reply ("Thanks, Tom!"). Confirm it against the listing
+before launch. His review is currently the only social proof for **garage cleanouts**,
+which is also one of the three services with no job photo, so it is doing real work on
+that page.
+
+**Lora Budach's review corroborates the pricing claim** — "He will quote you a cost up
+front for your junk removal" independently backs the "Upfront Pricing, No Surprises" point
+on the owner sign-off list.
+
+### ⚠ No review schema, now or later
+Stars are shown to humans. **No `Review` or `AggregateRating` structured data is emitted
+anywhere on this site**, and none may be added. Self-serving review markup on your own
+domain is against Google's structured data guidelines and is a penalty risk — that is true
+whether the reviews are genuine or not, so being real does not make it safe. Stars belong
+on the Google Business Profile, which Google already trusts. Verified by
+`scripts/verify-schema.mjs`, which fails the check if a Review entity or `ratingValue`
+key ever appears.
+
+---
+
 ## ⚠ SNOW REMOVAL — needs facts before it can ship
 
 `/` is now a two-way chooser and `/snow-removal` exists, but **nothing about the snow

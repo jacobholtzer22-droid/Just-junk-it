@@ -9,6 +9,8 @@ import ServicesGrid from "@/components/ServicesGrid";
 import Faq from "@/components/Faq";
 import CtaBand from "@/components/CtaBand";
 import JsonLd from "@/components/JsonLd";
+import ReviewsCarousel from "@/components/ReviewsCarousel";
+import ScrollReveal from "@/components/ScrollReveal";
 import { faqSchema, breadcrumbSchema, serviceSchema } from "@/lib/schema";
 
 export const metadata = pageMetadata("junkHome");
@@ -22,7 +24,7 @@ export const metadata = pageMetadata("junkHome");
  * All ten sections from the brief, in order.
  */
 export default function JunkRemovalPage() {
-  const { business, hero, trust, whyUs, howItWorks, contact, gallery, geo, serviceArea, faqs, seo } = site;
+  const { business, hero, trust, whyUs, howItWorks, contact, gallery, geo, serviceArea, faqs, seo, reviews } = site;
 
   return (
     <main>
@@ -159,6 +161,23 @@ export default function JunkRemovalPage() {
           </ul>
         </div>
       </section>
+
+      {/* ---- Reviews -----------------------------------------------------------
+          Renders nothing while site.reviews is empty. No Review or AggregateRating schema
+          is emitted here or anywhere — self-serving review markup is a penalty risk. */}
+      {reviews.length > 0 ? (
+        <section className="border-t-2 border-paper/10 px-5 py-16 sm:px-6 sm:py-20">
+          <div className="mx-auto max-w-6xl">
+            <h2 className="text-display-sm sm:text-display-md">What customers say</h2>
+            <div className="mt-10">
+              <ReviewsCarousel reviews={reviews} />
+            </div>
+            <a href="/reviews" className="btn-outline mt-8 px-6 py-4 text-lg">
+              Read all reviews
+            </a>
+          </div>
+        </section>
+      ) : null}
 
       {/* ---- FAQ ---------------------------------------------------------------
           The array passed to <Faq> is the SAME array passed to faqSchema() below, so the

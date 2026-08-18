@@ -75,6 +75,24 @@ export type Service = {
 
 export type Faq = { id: string; q: string; a: string };
 
+export type Review = {
+  /** The reviewer's name EXACTLY as it appears on the source platform. */
+  author: string;
+  /** The review text VERBATIM. Never tidied, never shortened, never paraphrased. */
+  body: string;
+  /** Where it was left. Shown to the reader so the claim is checkable. */
+  source: "Google" | "Facebook";
+  /** ISO date the review was left, if known. Display only. */
+  date?: string;
+  /**
+   * Confirmed by Jacob: every review is 5 stars. Displayed as stars for humans.
+   * ⚠ This NEVER becomes Review or AggregateRating schema — see the note on `reviews`.
+   */
+  rating?: 5;
+  /** Service slugs this review is evidence for, so service pages can show a relevant one. */
+  services?: string[];
+};
+
 /**
  * E.164 throughout. The build prompt wrote the sticky-bar hrefs as `tel:2182561340`;
  * this uses `tel:+12182561340` instead, matching the reference repo's house pattern.
@@ -310,6 +328,27 @@ export const site = {
       blurb: "Couches, mattresses, recliners, desks. Out of the room, not just the curb.",
       icon: Sofa,
       photoKey: "before-02-basement-estate-cleanout",
+      metaTitle: "Furniture Removal in Grand Rapids, MN | Just Junk It",
+      metaDescription: "Furniture removal in Grand Rapids and across Itasca County, MN. Couches, mattresses, recliners and desks carried out of the room. Call or text (218) 256-1340.",
+      intro: "Just Junk It removes furniture from homes, apartments and rentals in Grand Rapids and across Itasca County. We carry it out of the room it is sitting in \u2014 down stairs, through doorways, out of a basement \u2014 so you are not dragging a couch to the curb yourself.",
+      covers: [
+        "Couches, sectionals and loveseats",
+        "Mattresses and box springs",
+        "Recliners and armchairs",
+        "Dressers, wardrobes and headboards",
+        "Desks, filing cabinets and office chairs",
+        "Dining sets and coffee tables",
+        "Entertainment centres and bookcases",
+        "Patio and deck furniture"
+      ],
+      whenYouNeedIt: [
+        "New furniture is arriving and the old set has to be gone first",
+        "Clearing a rental between tenants",
+        "A mattress that will not fit in any vehicle you own",
+        "Downsizing and the pieces are too big to sell"
+      ],
+      faqIds: ["move-it", "cost", "same-day", "areas"],
+      related: ["estate-cleanouts", "appliance-removal", "junk-removal"],
     },
     {
       title: "Appliance Removal",
@@ -317,6 +356,27 @@ export const site = {
       blurb: "Fridges, washers, dryers, water heaters. Disconnected and hauled.",
       icon: WashingMachine,
       photoKey: "job-02-basement-appliances",
+      metaTitle: "Appliance Removal in Grand Rapids, MN | Just Junk It",
+      metaDescription: "Appliance removal in Grand Rapids and Itasca County, MN. Fridges, washers, dryers and water heaters disconnected and hauled away. Call or text (218) 256-1340.",
+      intro: "Just Junk It hauls old appliances out of homes across Grand Rapids and Itasca County. Appliances are heavy, awkward and usually sitting in a basement or a tight laundry room, which is exactly the kind of job people put off for months.",
+      covers: [
+        "Refrigerators and chest freezers",
+        "Washers and dryers",
+        "Stoves, ovens and cooktops",
+        "Dishwashers",
+        "Water heaters",
+        "Microwaves and small kitchen appliances",
+        "Air conditioners and dehumidifiers",
+        "Furnaces and boilers being replaced"
+      ],
+      whenYouNeedIt: [
+        "A replacement is being delivered and the old unit has to go",
+        "A basement laundry pair that has not moved in twenty years",
+        "An appliance that died and is now just taking up the room",
+        "Clearing a property before it goes on the market"
+      ],
+      faqIds: ["move-it", "cost", "areas", "what-we-take"],
+      related: ["furniture-removal", "estate-cleanouts", "junk-removal"],
     },
     {
       title: "Estate Cleanouts",
@@ -324,6 +384,25 @@ export const site = {
       blurb: "Whole-house clearing, handled quietly and without rushing you.",
       icon: Home,
       photoKey: "after-02-basement-estate-cleanout",
+      metaTitle: "Estate Cleanouts in Grand Rapids, MN | Just Junk It",
+      metaDescription: "Estate cleanouts in Grand Rapids and Itasca County, MN. Whole-house clearing handled quietly and at your pace. Call or text (218) 256-1340 for a free quote.",
+      intro: "Just Junk It handles estate and whole-house cleanouts in Grand Rapids and across Itasca County. These jobs usually come at a hard time, so we work at whatever pace you set and take direction on what stays and what goes.",
+      covers: [
+        "Whole-house clearing, room by room",
+        "Basements, attics and crawlspaces",
+        "Garages and outbuildings",
+        "Furniture, appliances and household goods",
+        "Boxes, papers and decades of stored items",
+        "Clearing a property ahead of a sale or listing"
+      ],
+      whenYouNeedIt: [
+        "Settling a parent's or relative's estate",
+        "A property has to be empty before closing",
+        "A move into assisted living",
+        "Years of stored belongings that have to be dealt with at once"
+      ],
+      faqIds: ["move-it", "cost", "areas", "same-day"],
+      related: ["garage-cleanouts", "furniture-removal", "junk-removal"],
     },
     {
       title: "Garage Cleanouts",
@@ -332,6 +411,26 @@ export const site = {
       icon: Warehouse,
       // TODO PHOTO: no garage job photo exists. Falls back to the truck. See HANDOFF.md.
       photoKey: "truck-01-dump-trailer-grand-rapids",
+      metaTitle: "Garage Cleanouts in Grand Rapids, MN | Just Junk It",
+      metaDescription: "Garage cleanouts in Grand Rapids and across Itasca County, MN. Get the stall back \u2014 we clear it out and sweep up behind us. Call or text (218) 256-1340.",
+      intro: "Just Junk It clears garages in Grand Rapids and across Itasca County. Most garages fill up one box at a time over years, which is why they are hard to tackle in a weekend and easy to clear in an afternoon with a truck and trailer at the door.",
+      covers: [
+        "Stacked boxes and totes",
+        "Old tools, hardware and workbenches",
+        "Bikes, sleds and sporting gear",
+        "Broken lawn equipment and snowblowers",
+        "Scrap wood, metal and leftover building material",
+        "Shelving and cabinets once they are emptied",
+        "Tyres and wheels"
+      ],
+      whenYouNeedIt: [
+        "You want to park a vehicle in there again",
+        "Selling the house and the garage is the problem room",
+        "Years of storage that has quietly become junk",
+        "Making space before winter"
+      ],
+      faqIds: ["move-it", "cost", "same-day", "areas"],
+      related: ["estate-cleanouts", "construction-debris-removal", "junk-removal"],
     },
     {
       title: "Yard Waste Removal",
@@ -339,6 +438,25 @@ export const site = {
       blurb: "Brush, branches, leaves and storm debris off the property for good.",
       icon: Leaf,
       photoKey: "after-01-brush-birch-grand-rapids",
+      metaTitle: "Yard Waste Removal in Grand Rapids, MN | Just Junk It",
+      metaDescription: "Yard waste and brush removal in Grand Rapids and Itasca County, MN. Branches, brush piles and storm debris hauled off. Call or text (218) 256-1340.",
+      intro: "Just Junk It hauls brush, branches and yard waste out of properties across Grand Rapids and Itasca County. Northern Minnesota puts a lot of wood on the ground, and a brush pile does not go away on its own.",
+      covers: [
+        "Brush and branch piles",
+        "Storm-downed limbs",
+        "Cut saplings and cleared undergrowth",
+        "Leaves and garden waste",
+        "Old fencing and landscape timbers",
+        "Sod, soil and stumps once they are out of the ground"
+      ],
+      whenYouNeedIt: [
+        "A pile left over from clearing a lot or a treeline",
+        "After a wind or ice storm",
+        "Opening a property up in spring",
+        "A brush pile that has been sitting since last season"
+      ],
+      faqIds: ["areas", "cost", "same-day", "move-it"],
+      related: ["construction-debris-removal", "junk-removal", "garage-cleanouts"],
     },
     {
       title: "Construction Debris Removal",
@@ -347,6 +465,26 @@ export const site = {
       icon: HardHat,
       // TODO PHOTO: no construction job photo exists. Falls back to the truck.
       photoKey: "truck-01-dump-trailer-grand-rapids",
+      metaTitle: "Construction Debris Removal in Grand Rapids, Minnesota",
+      metaDescription: "Construction and remodel debris removal in Grand Rapids and Itasca County, MN. Drywall, flooring, lumber and shingles hauled off. Call or text (218) 256-1340.",
+      intro: "Just Junk It clears construction and remodel debris from job sites and homes across Grand Rapids and Itasca County. A finished remodel still looks unfinished while the torn-out material is stacked in the driveway.",
+      covers: [
+        "Torn-out flooring, carpet and underlay",
+        "Drywall and plaster",
+        "Scrap lumber and trim",
+        "Shingles and roofing tear-off",
+        "Old cabinets, counters and fixtures",
+        "Windows and doors",
+        "Siding and decking boards"
+      ],
+      whenYouNeedIt: [
+        "A remodel is done and the debris is still on site",
+        "A tear-out that filled the garage or driveway",
+        "A contractor left the material behind",
+        "Clearing a site before the next trade arrives"
+      ],
+      faqIds: ["cost", "areas", "move-it", "what-we-take"],
+      related: ["garage-cleanouts", "yard-waste-removal", "junk-removal"],
     },
     {
       title: "Hot Tub & Shed Removal",
@@ -355,6 +493,25 @@ export const site = {
       icon: Waves,
       // TODO PHOTO: no hot tub or shed job photo exists. Falls back to the truck.
       photoKey: "truck-01-dump-trailer-grand-rapids",
+      metaTitle: "Hot Tub & Shed Removal in Grand Rapids, MN | Just Junk It",
+      metaDescription: "Hot tub and shed removal in Grand Rapids and Itasca County, MN. Broken down, cut apart and carried out \u2014 the heavy awkward stuff. Call or text (218) 256-1340.",
+      intro: "Just Junk It removes hot tubs and sheds from properties in Grand Rapids and across Itasca County. Neither one comes out in one piece: a hot tub has to be drained and cut apart, and a shed has to be dismantled where it stands.",
+      covers: [
+        "Hot tubs and spas, drained and cut down",
+        "Surrounds, steps and covers",
+        "Wooden and metal storage sheds",
+        "Playsets and swing sets",
+        "Above-ground pool frames and liners",
+        "Old decking around a removed tub"
+      ],
+      whenYouNeedIt: [
+        "A tub that has not been filled in years",
+        "A shed that has rotted or blown apart",
+        "Reclaiming the corner of the yard it is sitting on",
+        "Clearing the property before it is listed"
+      ],
+      faqIds: ["cost", "move-it", "areas", "what-we-take"],
+      related: ["yard-waste-removal", "construction-debris-removal", "junk-removal"],
     },
   ] as Service[],
 
@@ -401,6 +558,111 @@ export const site = {
       a: "Furniture, appliances, yard waste and brush, construction debris, hot tubs and sheds, garage and estate cleanouts, and general household junk. If you are not sure whether we can take something, send a photo by text and we will tell you.",
     },
   ] as Faq[],
+
+  /**
+   * ⚠ EMPTY UNTIL REAL REVIEWS ARRIVE. DO NOT WRITE ANYTHING HERE.
+   *
+   * No review has been supplied — no text, no names, no ratings, no source. Every
+   * reviews surface on this site (the homepage strip, the /reviews page, the carousel)
+   * checks this array and renders NOTHING while it is empty. The nav link to /reviews is
+   * hidden too. Nothing looks broken; the section simply is not there.
+   *
+   * When they arrive, paste them VERBATIM — real name as shown on the platform, real
+   * wording, typos and all. A tidied review is a fabricated one.
+   *
+   * ⚠ NO Review OR AggregateRating SCHEMA WILL BE EMITTED, even once this is populated.
+   * Self-serving review markup on your own domain is against Google's structured data
+   * guidelines and is a penalty risk. The reviews are shown to humans as plain text.
+   * That is deliberate — do not "fix" it by adding rating markup later.
+   */
+  /**
+   * REAL Google reviews, supplied by Jacob. Reproduced VERBATIM — including the two that
+   * spell the owner's name "Tristan" rather than "Trystan", and Vickie's missing
+   * apostrophe in "Im". Do not correct them. A tidied review is a fabricated one, and the
+   * wording is checkable against the live Google listing.
+   *
+   * ALL FIVE STARS, confirmed by Jacob. Shown as stars to humans.
+   *
+   * ⚠ NO Review OR AggregateRating SCHEMA IS EMITTED ANYWHERE ON THIS SITE, and none may
+   * be added later. Self-serving review markup on your own domain is against Google's
+   * structured data guidelines and is a penalty risk — that is true whether the reviews
+   * are real or not, so being genuine does not make it safe. Stars belong on the Google
+   * Business Profile, which Google already trusts.
+   *
+   * THREE REVIEWS ARE DELIBERATELY MISSING. Courtney Eden, Tiffany Jenniges and Stir Frei
+   * were all truncated with "… More" in the source paste, so their full text is not known.
+   * Publishing a review that stops mid-thought misrepresents what the person wrote. Get
+   * the untruncated text from the Google listing and they can be added — Tiffany's in
+   * particular (land clearing, old campers, a tractor) is strong evidence for the kind of
+   * big job the photo set does not cover. Listed in HANDOFF.md.
+   */
+  reviews: [
+    {
+      "author": "Tom",
+      "source": "Google",
+      "rating": 5,
+      "services": [
+        "garage-cleanouts",
+        "junk-removal"
+      ],
+      "body": "From start to finish Trystan did an outstanding job. We really needed to have our garage cleaned out from years of everything you could think of. Trystan delivered and I would highly recommend him."
+    },
+    {
+      "author": "Lora Budach",
+      "source": "Google",
+      "rating": 5,
+      "services": [
+        "junk-removal"
+      ],
+      "body": "Trystan is fast, friendly, and respectful. He will quote you a cost up front for your junk removal. 100% would recommend."
+    },
+    {
+      "author": "Pete",
+      "source": "Google",
+      "rating": 5,
+      "services": [
+        "furniture-removal",
+        "yard-waste-removal"
+      ],
+      "body": "Trystan was a great help. He removed furniture and a big brush pile under 30 minutes. He was very professional and would 100% recommend his services."
+    },
+    {
+      "author": "Vickie Ekstedt",
+      "source": "Google",
+      "rating": 5,
+      "services": [
+        "appliance-removal"
+      ],
+      "body": "Tristan removed our water heater and had it all under his belt. And did the job fast with a nice attitude. Im so pleased with this guy I will call this company again thank you Tristan. And I will tell all I know about this company."
+    },
+    {
+      "author": "Christina",
+      "source": "Google",
+      "rating": 5,
+      "services": [
+        "junk-removal"
+      ],
+      "body": "Easy to arrange, no hassle, fast service. Professional and courteous."
+    },
+    {
+      "author": "Patrice Curtiss",
+      "source": "Google",
+      "rating": 5,
+      "services": [
+        "junk-removal"
+      ],
+      "body": "We were very pleased with the work and how friendly Tristan was."
+    },
+    {
+      "author": "Judith Young",
+      "source": "Google",
+      "rating": 5,
+      "services": [
+        "junk-removal"
+      ],
+      "body": "Trystan and friend were very professional!\nHard workers!"
+    }
+  ] as Review[],
 
   gallery: {
     heading: "Before and after",
@@ -512,6 +774,7 @@ export const site = {
     { label: "Junk Removal", href: "/junk-removal" },
     { label: "Snow Removal", href: "/snow-removal" },
     { label: "Gallery", href: "/gallery" },
+    { label: "Reviews", href: "/reviews" },
     { label: "Service Areas", href: "/service-areas" },
     { label: "Contact", href: "/contact" },
   ],
@@ -539,12 +802,12 @@ export const site = {
       },
       junkHome: {
         path: "/junk-removal",
-        title: `Junk Removal in ${GEO_LEAD}, MN | Just Junk It`,
+        title: `Junk Removal & Hauling in ${GEO_LEAD}, MN | Just Junk It`,
         description: `Junk removal and hauling in ${GEO_LEAD} and across ${GEO_REGION}. You point, we load, it's gone. Same day service available. Call or text ${PHONE_DISPLAY}.`,
       },
       snowHome: {
         path: "/snow-removal",
-        title: `Snow Removal in ${GEO_LEAD}, MN | Just Junk It`,
+        title: `Snow Removal in ${GEO_LEAD}, Minnesota | Just Junk It`,
         description: `Snow removal in ${GEO_LEAD} and across ${GEO_REGION}, Minnesota. Locally owned and operated. Call or text ${PHONE_DISPLAY} to ask about winter availability.`,
       },
       gallery: {
@@ -554,19 +817,29 @@ export const site = {
       },
       contact: {
         path: "/contact",
-        title: `Get a Free Junk Removal Quote | ${GEO_LEAD}, MN`,
+        title: `Free Junk Removal Quote | ${GEO_LEAD} & Itasca County`,
         description: `Request a free quote for junk removal or hauling in ${GEO_LEAD} and ${GEO_REGION}. Call or text ${PHONE_DISPLAY}, or send the form and get a call back.`,
       },
       serviceAreas: {
         path: "/service-areas",
-        title: `Junk Removal Service Area | ${GEO_REGION}, MN`,
-        description: `Just Junk It covers ${GEO_LEAD}, Cohasset, Coleraine, Bovey, Deer River, Bigfork, Nashwauk and the rest of ${GEO_REGION}, Minnesota. Call or text for a free quote.`,
+        title: `Junk Removal Service Area | ${GEO_REGION}, Minnesota`,
+        description: `Just Junk It covers ${GEO_LEAD}, Cohasset, Coleraine, Bovey, Deer River, Bigfork, Nashwauk and the rest of ${GEO_REGION}, MN. Call or text for a quote.`,
+      },
+      reviews: {
+        path: "/reviews",
+        title: `Junk Removal Reviews | Just Junk It, ${GEO_LEAD} MN`,
+        description: `What customers in ${GEO_LEAD} and ${GEO_REGION} say about Just Junk It after a junk removal, cleanout or hauling job. Read them in full, unedited.`,
+      },
+      gallery2: {
+        path: "/gallery",
+        title: `Junk Removal Before & After Photos | ${GEO_LEAD} MN`,
+        description: `Real before and after photos from junk removal and cleanout jobs across ${GEO_REGION}, Minnesota. Every photo on this page is from an actual job.`,
       },
       privacy: {
         path: "/privacy",
-        title: "Privacy Policy | Just Junk It",
+        title: "Privacy Policy | Just Junk It, Grand Rapids Minnesota",
         description:
-          "How Just Junk It handles the information you submit through this website, including phone numbers given for text message follow-up.",
+          "How Just Junk It in Grand Rapids, Minnesota handles the information you submit through this website, including phone numbers given for text message reply.",
       },
     },
   },
