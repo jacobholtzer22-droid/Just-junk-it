@@ -31,7 +31,7 @@ export default function BeforeAfter({ beforeKey, afterKey, caption }: Props) {
           <div key={side.label} className={i === 1 ? "border-t-2 border-paper/10 sm:border-l-2 sm:border-t-0" : ""}>
             <p
               className={`px-4 py-2 font-display text-sm uppercase tracking-[0.2em] ${
-                side.accent ? "bg-accent text-ink" : "bg-paper/10 text-paper"
+                side.accent ? "bg-accent text-paper" : "bg-paper/10 text-paper"
               }`}
             >
               {side.label}

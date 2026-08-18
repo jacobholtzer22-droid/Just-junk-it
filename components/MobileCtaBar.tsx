@@ -15,7 +15,7 @@ import TelLink, { SmsLink } from "./TelLink";
 export default function MobileCtaBar() {
   return (
     <div className="fixed inset-x-0 bottom-0 z-50 grid grid-cols-2 border-t-2 border-ink md:hidden">
-      <TelLink className="flex min-h-[68px] items-center justify-center gap-2.5 bg-accent font-display text-xl uppercase tracking-wide text-ink">
+      <TelLink className="flex min-h-[68px] items-center justify-center gap-2.5 bg-accent font-display text-xl uppercase tracking-wide text-paper">
         <Phone className="h-5 w-5" strokeWidth={2.5} aria-hidden="true" />
         {site.cta.callLabel}
       </TelLink>

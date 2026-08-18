@@ -115,7 +115,7 @@ export default function ContactForm() {
   if (status === "success") {
     return (
       <div className="border-2 border-accent/30 bg-surface p-8 text-center sm:p-12">
-        <span className="mx-auto inline-flex h-16 w-16 items-center justify-center rounded-full bg-accent text-ink">
+        <span className="mx-auto inline-flex h-16 w-16 items-center justify-center rounded-full bg-accent text-paper">
           <Check className="h-8 w-8" strokeWidth={3} aria-hidden="true" />
         </span>
         <h2 className="mt-6 font-display text-4xl uppercase tracking-tight text-paper">

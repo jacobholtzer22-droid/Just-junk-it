@@ -60,7 +60,7 @@ export default function ReviewsCarousel({ reviews }: { reviews: readonly Review[
         }
         return next;
       });
-    }, 7000); // long enough to actually finish reading a review
+    }, 9000); // senior pass: 9s per review — slow enough to finish reading without rushing
     return () => window.clearInterval(id);
   }, [auto, reviews.length]);
 

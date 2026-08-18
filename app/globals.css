@@ -5,6 +5,10 @@
 @layer base {
   html {
     -webkit-text-size-adjust: 100%;
+    /* Senior-readability pass: one notch up from the browser's 16px default. Everything
+       on the site is rem-based, so this scales type, inputs and buttons together without
+       touching a single component. Chosen over per-component bumps so nothing is missed. */
+    font-size: 17px;
   }
   body {
     @apply bg-ink font-body text-paper antialiased;
@@ -26,12 +30,14 @@
 
 @layer components {
   /*
-    The one accent-coloured control on the site. Black text on safety yellow measures
-    ~14.9:1. Min height 56px clears the 44px touch target with room for gloves.
+    The one accent-coloured control on the site: logo-red fill, paper text — the same
+    treatment as the lettering on the logo's own banner. Paper on #C1272D measures 5.13:1.
+    NEVER flip this to text-ink: black on this red is 3.37:1 and fails for button labels.
+    Min height 56px clears the 44px touch target with room for gloves.
   */
   .btn-accent {
     @apply inline-flex min-h-[56px] items-center justify-center gap-2.5 bg-accent
-           font-display uppercase tracking-wide text-ink transition-colors
+           font-display uppercase tracking-wide text-paper transition-colors
            hover:bg-accent/90 active:bg-accent/80;
   }
   .btn-outline {

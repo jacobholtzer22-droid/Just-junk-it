@@ -1,15 +1,22 @@
 import type { Config } from "tailwindcss";
 
 /**
- * Heavy industrial, Northern Minnesota. Near-black base, ONE high-visibility accent.
+ * Heavy industrial, Northern Minnesota. Near-black base, ONE accent.
  *
- * ACCENT: safety yellow, and only safety yellow. Hazard orange was the alternative and
- * was rejected on contrast — #FFD400 on #0B0B0C measures ~15.9:1, while a comparable
- * hazard orange lands near 6:1. With an accent this load-bearing (every CTA, every tap
- * target, on a phone, outdoors) the yellow is the one that stays legible.
+ * ACCENT: the LOGO RED (Aug 2026 — Jacob supplied Trystan's actual logo: black field,
+ * dark-red banner with white lettering, red diamond border). The earlier safety yellow
+ * is gone; the site now matches the brand mark.
  *
- * The accent is for CTAs and almost nothing else. If you are reaching for it to decorate
- * something, don't — the point is that the eye always knows where to tap.
+ * WHICH red, and why this exact hex: the logo carries two reds. The deep banner red
+ * (~#8E1215) measures 2.11:1 on our near-black — unusable for anything. #C1272D matches
+ * the logo's brighter border red and measures, verified by calculation:
+ *   3.37:1 on ink   -> passes for icons, borders, and LARGE display text only
+ *   5.13:1 under paper text -> passes for button labels
+ * The consequences are load-bearing rules, not suggestions:
+ *   - Buttons are red FILLS with PAPER text — same as the logo banner itself. Never put
+ *     ink text on an accent fill (3.37:1, fails).
+ *   - Small accent-coloured text is FORBIDDEN. Small emphasis is paper, not red.
+ *   - danger is AMBER, not a second red — an error must not look like a CTA.
  */
 const config: Config = {
   content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./lib/**/*.{ts,tsx}"],
@@ -19,8 +26,8 @@ const config: Config = {
         ink: "#0B0B0C", // page base, near-black
         surface: "#141416", // lifted panels, form background
         paper: "#F2F0EB", // primary text, warm off-white
-        accent: "#FFD400", // safety yellow — CTAs only
-        danger: "#FF6B4A", // errors only. 6.6:1 on ink
+        accent: "#C1272D", // logo red — fills w/ paper text, icons, LARGE type only
+        danger: "#FFB020", // errors only — amber, 10.8:1 on ink, cannot be mistaken for the red CTAs
       },
       fontFamily: {
         display: ["var(--font-display)", "Impact", "sans-serif"],

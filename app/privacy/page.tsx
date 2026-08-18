@@ -47,7 +47,7 @@ export default function PrivacyPage() {
         <h2 className="pt-4 text-2xl text-paper">Getting your information removed</h2>
         <p>
           Call or text {business.phoneDisplay}, or email{" "}
-          <a className="-my-2 inline-flex min-h-[44px] items-center py-2 text-accent underline underline-offset-2" href={`mailto:${business.email}`}>
+          <a className="-my-2 inline-flex min-h-[44px] items-center py-2 text-paper underline underline-offset-2" href={`mailto:${business.email}`}>
             {business.email}
           </a>
           , and ask. We will delete it.

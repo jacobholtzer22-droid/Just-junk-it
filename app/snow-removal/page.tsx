@@ -33,7 +33,7 @@ export default function SnowRemovalPage() {
     <main>
       <section className="border-b-2 border-paper/10 px-5 py-16 sm:px-6 sm:py-24">
         <div className="mx-auto max-w-6xl">
-          <p className="font-display text-sm uppercase tracking-[0.25em] text-accent">
+          <p className="font-display text-sm uppercase tracking-[0.25em] text-paper/70">
             Winter season
           </p>
           <h1 className="mt-4 text-display-sm sm:text-display-lg">{snow.h1}</h1>
