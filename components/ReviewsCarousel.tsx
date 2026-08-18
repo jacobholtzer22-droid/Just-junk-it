@@ -114,7 +114,7 @@ export default function ReviewsCarousel({ reviews }: { reviews: readonly Review[
             </blockquote>
             <footer className="mt-6 border-t-2 border-paper/10 pt-4">
               <p className="font-display text-xl uppercase text-paper">{r.author}</p>
-              <p className="mt-1 text-sm uppercase tracking-widest text-paper/50">
+              <p className="mt-1 text-sm uppercase tracking-widest text-paper/60">
                 via {r.source}
                 {r.date ? ` · ${new Date(r.date).toLocaleDateString("en-US", { month: "short", year: "numeric" })}` : ""}
               </p>
@@ -129,7 +129,7 @@ export default function ReviewsCarousel({ reviews }: { reviews: readonly Review[
             type="button"
             onClick={() => { stopAuto(); scrollTo(index - 1); }}
             aria-label="Previous review"
-            className="flex h-11 w-11 items-center justify-center border-2 border-paper/25 text-paper transition-colors hover:border-accent hover:text-accent"
+            className="flex h-11 w-11 shrink-0 items-center justify-center border-2 border-paper/25 text-paper transition-colors hover:border-accent hover:text-accent"
           >
             <ChevronLeft className="h-6 w-6" aria-hidden="true" />
           </button>
@@ -137,12 +137,12 @@ export default function ReviewsCarousel({ reviews }: { reviews: readonly Review[
             type="button"
             onClick={() => { stopAuto(); scrollTo(index + 1); }}
             aria-label="Next review"
-            className="flex h-11 w-11 items-center justify-center border-2 border-paper/25 text-paper transition-colors hover:border-accent hover:text-accent"
+            className="flex h-11 w-11 shrink-0 items-center justify-center border-2 border-paper/25 text-paper transition-colors hover:border-accent hover:text-accent"
           >
             <ChevronRight className="h-6 w-6" aria-hidden="true" />
           </button>
 
-          <ol className="ml-2 flex items-center gap-2">
+          <ol className="ml-1 flex items-center">
             {reviews.map((r, i) => (
               <li key={`dot-${i}`}>
                 <button
@@ -150,10 +150,10 @@ export default function ReviewsCarousel({ reviews }: { reviews: readonly Review[
                   onClick={() => { stopAuto(); scrollTo(i); }}
                   aria-label={`Go to review ${i + 1} of ${reviews.length}`}
                   aria-current={i === index ? "true" : undefined}
-                  className="flex h-11 w-5 items-center justify-center"
+                  className="flex h-11 w-11 shrink-0 items-center justify-center"
                 >
                   <span
-                    className={`block h-1.5 w-full transition-colors ${i === index ? "bg-accent" : "bg-paper/25"}`}
+                    className={`block h-1.5 w-5 transition-colors ${i === index ? "bg-accent" : "bg-paper/25"}`}
                   />
                 </button>
               </li>

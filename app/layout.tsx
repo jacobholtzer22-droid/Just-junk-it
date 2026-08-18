@@ -29,8 +29,15 @@ const display = Anton({
   display: "swap",
 });
 
+/**
+ * Barlow ships ONLY the weights the site uses: 400 for body copy and 600 for the one
+ * form-error style. 500 and 700 were preloaded on every page and used nowhere — five
+ * preloaded font files were competing with the LCP element, which is the H1 text.
+ * Every unused weight is a preload, a round trip and a delay to the largest paint.
+ * Add a weight here only when something actually renders in it.
+ */
 const body = Barlow({
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "600"],
   subsets: ["latin"],
   variable: "--font-body",
   display: "swap",

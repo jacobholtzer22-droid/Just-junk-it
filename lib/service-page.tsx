@@ -65,7 +65,7 @@ export default function ServicePage({ slug }: { slug: string }) {
       <section className="border-b-2 border-paper/10 px-5 py-14 sm:px-6 sm:py-20">
         <div className="mx-auto max-w-6xl">
           <nav aria-label="Breadcrumb" className="mb-6 text-sm uppercase tracking-widest text-paper/45">
-            <Link href="/junk-removal" className="hover:text-accent">Junk Removal</Link>
+            <Link href="/junk-removal" className="-my-2 inline-flex min-h-[44px] items-center py-2 hover:text-accent">Junk Removal</Link>
             <span aria-hidden="true"> / </span>
             <span className="text-paper/70">{s.title}</span>
           </nav>

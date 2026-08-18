@@ -73,7 +73,7 @@ export default function ReviewsPage() {
                       </blockquote>
                       <figcaption className="mt-5 border-t-2 border-paper/10 pt-4">
                         <span className="font-display text-xl uppercase text-paper">{r.author}</span>
-                        <span className="mt-1 block text-sm uppercase tracking-widest text-paper/50">
+                        <span className="mt-1 block text-sm uppercase tracking-widest text-paper/60">
                           via {r.source}
                         </span>
                       </figcaption>

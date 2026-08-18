@@ -20,7 +20,7 @@ export default function Footer() {
         </div>
 
         <div>
-          <h2 className="font-display text-lg uppercase tracking-widest text-paper/50">Contact</h2>
+          <h2 className="font-display text-lg uppercase tracking-widest text-paper/60">Contact</h2>
           <ul className="mt-2">
             <li>
               <TelLink className="-mx-2 flex min-h-[44px] items-center gap-2 px-2 text-lg text-paper hover:text-accent">
@@ -52,7 +52,7 @@ export default function Footer() {
         </div>
 
         <div>
-          <h2 className="font-display text-lg uppercase tracking-widest text-paper/50">Services</h2>
+          <h2 className="font-display text-lg uppercase tracking-widest text-paper/60">Services</h2>
           <ul className="mt-2">
             {services.map((s) => (
               <li key={s.slug}>
@@ -65,7 +65,7 @@ export default function Footer() {
         </div>
 
         <div>
-          <h2 className="font-display text-lg uppercase tracking-widest text-paper/50">More</h2>
+          <h2 className="font-display text-lg uppercase tracking-widest text-paper/60">More</h2>
           <ul className="mt-2">
             {nav.map((n) => (
               <li key={n.href}>
@@ -96,7 +96,7 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="mx-auto mt-12 max-w-6xl border-t-2 border-paper/10 pt-6 text-sm text-paper/50">
+      <div className="mx-auto mt-12 max-w-6xl border-t-2 border-paper/10 pt-6 text-sm text-paper/60">
         <p>
           © {new Date().getFullYear()} {business.name} · {business.city}, {business.state} ·{" "}
           <TelLink className="inline-flex min-h-[44px] items-center hover:text-accent">{business.phoneDisplay}</TelLink>

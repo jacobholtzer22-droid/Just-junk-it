@@ -200,7 +200,7 @@ export default function ContactForm() {
         <div>
           <label htmlFor="email" className={labelClass}>
             {f.emailLabel}{" "}
-            <span className="font-body normal-case tracking-normal text-paper/45">
+            <span className="font-body normal-case tracking-normal text-paper/60">
               {f.emailOptionalLabel}
             </span>
           </label>
@@ -219,7 +219,7 @@ export default function ContactForm() {
         <div>
           <label htmlFor="address" className={labelClass}>
             {f.addressLabel}{" "}
-            <span className="font-body normal-case tracking-normal text-paper/45">
+            <span className="font-body normal-case tracking-normal text-paper/60">
               {f.addressOptionalLabel}
             </span>
           </label>

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Just Junk It">
+  <rect width="64" height="64" fill="#0B0B0C"/>
+  <path d="M14 12h9v27c0 4.4-3.4 7.6-8.2 7.6-3 0-5.6-1.2-7.3-3.3l4.6-5.2c.7.9 1.5 1.4 2.4 1.4 1.2 0 1.9-.8 1.9-2.3V12z" fill="#FFD400"/>
+  <path d="M34 12h9v27c0 4.4-3.4 7.6-8.2 7.6-3 0-5.6-1.2-7.3-3.3l4.6-5.2c.7.9 1.5 1.4 2.4 1.4 1.2 0 1.9-.8 1.9-2.3V12z" fill="#FFD400"/>
+  <rect x="49" y="12" width="7" height="35" fill="#FFD400"/>
+</svg>
