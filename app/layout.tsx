@@ -18,6 +18,7 @@ import Analytics from "@/components/Analytics";
 import MobileCtaBar from "@/components/MobileCtaBar";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import DemoCanary from "@/components/DemoCanary";
 import JsonLd from "@/components/JsonLd";
 import { localBusinessSchema, websiteSchema, organizationSchema } from "@/lib/schema";
 
@@ -65,6 +66,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Footer />
         <MobileCtaBar />
         <Analytics />
+        {/* Logs a console error if a demo build ever serves on a non-vercel.app host. */}
+        <DemoCanary />
         {/* Sitewide. Every claim here is also printed in the footer on every page. */}
         <JsonLd data={localBusinessSchema()} />
         <JsonLd data={websiteSchema()} />

@@ -2,11 +2,13 @@
 
 ---
 
-## ⚠️ GO LIVE CHECKLIST — three steps, in order
+## ⚠️ GO LIVE CHECKLIST — four steps, in order
 
-**This site is currently a DEMO.** The quote form validates, honeypots, requires SMS
-consent, shows loading, and shows the real success screen — but it does **not** send
-anywhere, because there is no Neon Business row for Just Junk It yet.
+**This site is currently a DEMO, deployed to Production on the vercel.app domain** so
+the owner has one clean, stable link: `https://just-junk-it.vercel.app`. The quote form
+validates, honeypots, requires SMS consent, shows loading, and shows the real success
+screen — but it does **not** send anywhere, because there is no Neon Business row for
+Just Junk It yet.
 
 Nothing on the page says so. That is deliberate: Trystan is being shown his website,
 not a caveat.
@@ -14,8 +16,9 @@ not a caveat.
 | # | Step | Where |
 |---|---|---|
 | **1** | Create the Business row for Just Junk It in Neon. | Neon / admin panel |
-| **2** | Paste its **verbatim** slug into `crm.businessSlug`. | [`site.config.ts`](site.config.ts) line ~263 |
-| **3** | Delete the `NEXT_PUBLIC_DEMO_MODE` env var, then redeploy **without build cache**. | Vercel → Project → Settings → Environment Variables |
+| **2** | Paste its **verbatim** slug into `crm.businessSlug`. | [`site.config.ts`](site.config.ts) |
+| **3** | Delete the `NEXT_PUBLIC_DEMO_MODE` env var from **every** Vercel environment, then redeploy **without build cache**. | Vercel → Project → Settings → Environment Variables |
+| **4** | Only then point `justjunkitmn.com` DNS at this project. | Registrar / Vercel Domains |
 
 **Copy the slug from the live row — do not retype it from memory.** The CRM endpoint
 returns HTTP 200 even when `businessSlug` matches no Business row, so a wrong slug is
@@ -23,27 +26,42 @@ silent lead loss that looks identical to a working form. After step 3, send one 
 test submission and confirm it lands as a WebsiteLead in the dashboard. A green success
 message proves nothing on its own.
 
-**You cannot ship the demo state by accident.** `next build` hard-fails while
-`businessSlug` is empty unless `NEXT_PUBLIC_DEMO_MODE=true` is explicitly set. Two
-independent layers enforce it:
+### The guard is domain-aware — and refusing to build on a custom domain is intentional
 
-- [`scripts/preflight.mjs`](scripts/preflight.mjs) — runs before `next build` via the npm
-  script. Fails closed: if the `businessSlug` literal cannot even be found, that is a
-  failure, not a pass.
+Because demo mode now lives on Production, the old environment-based guard would have
+waved through the one deployment that matters: the day a real domain gets attached. The
+guard is therefore keyed on the **deployment host**, read from
+`VERCEL_PROJECT_PRODUCTION_URL` (which Vercel switches to the custom domain the moment
+one is attached to the project). **If steps 1 and 2 are not done, attaching
+`justjunkitmn.com` makes every subsequent build fail with this checklist.** That is not
+a bug to work around; it is the mechanism that makes silent lead loss on a real domain
+impossible.
+
+Three independent layers:
+
+- [`scripts/preflight.mjs`](scripts/preflight.mjs) — fails in under a second, before
+  Next starts. Fails closed: an unreadable `businessSlug` literal or an undeterminable
+  host is a failure, never a pass.
 - [`lib/require-live-config.ts`](lib/require-live-config.ts) — imported by
-  [`app/layout.tsx`](app/layout.tsx). The root layout is evaluated for every route during
-  static generation, so this cannot be tree-shaken out. This is the authoritative check;
-  it reads the parsed config value rather than file text.
+  [`app/layout.tsx`](app/layout.tsx), evaluated for every route during static
+  generation, cannot be tree-shaken. Authoritative: reads the parsed config value.
+- [`components/DemoCanary.tsx`](components/DemoCanary.tsx) — **runtime** canary for the
+  one path builds cannot catch: a demo build *promoted* to a custom domain without a
+  rebuild. Checks `window.location.hostname` on every page load and logs a loud console
+  error naming the file and the fix.
 
-Verified behaviour, all five states:
+Verified behaviour — every state below was RUN, not asserted (exit codes from the
+actual matrix, both layers):
 
-| `businessSlug` | `NEXT_PUBLIC_DEMO_MODE` | Build | Form |
+| Host (build-time) | `businessSlug` | `NEXT_PUBLIC_DEMO_MODE` | Build |
 |---|---|---|---|
-| empty | unset | **FAILS** (exit 1) | — |
-| empty | unset, preflight bypassed | **FAILS** (exit 1, layout guard) | — |
-| empty | `true` | passes | demo — no POST, console warning |
-| set | unset | passes | **live — POSTs to CRM** |
-| set | `true` (stale) | **FAILS** (exit 1) | — |
+| `*.vercel.app` | empty | `true` | **passes** — the demo state |
+| custom domain | empty | `true` | **FAILS** (exit 1, both layers) |
+| `*.vercel.app` | empty | unset | **FAILS** — demo must be explicit |
+| undeterminable (on Vercel) | empty | `true` | **FAILS** — fail closed |
+| local machine | empty | `true` | passes (cannot serve a domain; canary covers promotion) |
+| any | set | `true` (stale) | **FAILS** — go-live step 3 skipped |
+| any | set | unset | **passes — live, form POSTs** |
 
 No code change is needed to go live. The POST to
 `https://www.alignandacquire.com/api/contact` with
