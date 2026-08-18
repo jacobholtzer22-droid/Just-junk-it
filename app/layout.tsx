@@ -16,6 +16,10 @@ import "@/lib/require-live-config";
 import { site } from "@/site.config";
 import Analytics from "@/components/Analytics";
 import MobileCtaBar from "@/components/MobileCtaBar";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import JsonLd from "@/components/JsonLd";
+import { localBusinessSchema, websiteSchema, organizationSchema } from "@/lib/schema";
 
 /** Condensed and heavy — meant to read like it was stencilled on the side of a trailer. */
 const display = Anton({
@@ -49,9 +53,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${display.variable} ${body.variable}`}>
       <body className="page-shell">
+        <Header />
         {children}
+        <Footer />
         <MobileCtaBar />
         <Analytics />
+        {/* Sitewide. Every claim here is also printed in the footer on every page. */}
+        <JsonLd data={localBusinessSchema()} />
+        <JsonLd data={websiteSchema()} />
+        <JsonLd data={organizationSchema()} />
       </body>
     </html>
   );

@@ -43,22 +43,34 @@ export type Service = {
   /** One line, used on cards and in the services grid. */
   blurb: string;
   icon: LucideIcon;
+  /**
+   * Everything below is PAGE-LEVEL copy, written per service in Gate B. Optional only
+   * because the homepage grid ships first and needs title/slug/blurb/icon alone. When a
+   * service page is written these stop being optional in practice — the page will not
+   * render without them.
+   */
   /** Hand written, measured to 50-60 chars RENDERED. Not templated — a single template
    *  cannot hit the window for both "Junk Removal" and "Construction Debris Removal". */
-  metaTitle: string;
+  metaTitle?: string;
   /** Hand written, measured to 140-160 chars rendered. */
-  metaDescription: string;
+  metaDescription?: string;
   /** Opening paragraph. Answers who / what / where in two sentences. No slogan fluff. */
-  intro: string;
+  intro?: string;
   /** Concrete and specific to THIS service. Never a generic junk list. */
-  covers: string[];
-  whenYouNeedIt: string[];
-  image: SiteImage;
+  covers?: string[];
+  whenYouNeedIt?: string[];
+  image?: SiteImage;
   /** FAQ ids (from `faqs` below) rendered visibly on this page. The FAQPage schema is
    *  built from exactly this list — never a superset. */
-  faqIds: string[];
+  faqIds?: string[];
   /** Slugs of 2-3 related services, for the internal link block. */
-  related: string[];
+  related?: string[];
+  /**
+   * Key into lib/photo-manifest.ts. Where a service has no job photo of its own this
+   * points at a real asset described as exactly what it is (the truck) — never stock,
+   * never a photo relabelled as work it does not show. Those are marked TODO PHOTO.
+   */
+  photoKey?: string;
 };
 
 export type Faq = { id: string; q: string; a: string };
@@ -134,6 +146,43 @@ export const site = {
       "Remer",
       "Nashwauk",
     ],
+  },
+
+  /**
+   * TWO DIVISIONS. `/` is a chooser; each division has its own home page.
+   *
+   * ⚠ SNOW REMOVAL IS UNVERIFIED. Nothing about the snow side has been confirmed by
+   * Trystan: not what he actually offers (plowing? shovelling? roofs? salting?), not
+   * whether the snow service area matches the junk one, not whether he takes seasonal
+   * contracts. `snow.services` is deliberately EMPTY and the snow page renders no service
+   * list until it is filled. The only claims on that page are facts confirmed for the
+   * business as a whole — name, phone, hours, towns. See HANDOFF.md → SNOW REMOVAL.
+   */
+  divisions: [
+    {
+      key: "junk",
+      title: "Junk Removal",
+      tagline: "You point. We load. It's gone.",
+      href: "/junk-removal",
+      photoKey: "job-03-carport-packed-full",
+      available: "Year round",
+    },
+    {
+      key: "snow",
+      title: "Snow Removal",
+      tagline: "Northern Minnesota winters, handled.",
+      href: "/snow-removal",
+      // TODO PHOTO: no snow photography exists. Renders a type-only panel, never stock.
+      photoKey: "",
+      available: "Winter season",
+    },
+  ],
+
+  snow: {
+    h1: `Snow Removal in ${GEO_LEAD}, MN`,
+    sub: `Snow removal across ${GEO_REGION}, run by the same person who answers the phone.`,
+    /** ⚠ EMPTY ON PURPOSE — see the divisions comment. Do not populate without Trystan. */
+    services: [] as { title: string; blurb: string }[],
   },
 
   cta: {
@@ -234,9 +283,124 @@ export const site = {
    * renders a full-bleed type treatment in that slot instead of stock imagery.
    * See seo/PHOTO-INVENTORY.md §4 for the coverage gap.
    */
-  services: [] as Service[],
+  /**
+   * The eight services. Order is the order they appear in the homepage grid and the nav.
+   *
+   * Gate A ships title/slug/blurb/icon only. Page copy, meta and FAQ mappings are written
+   * per service in Gate B — no template filling, because a template cannot write an honest
+   * "what we take" list for both a hot tub and a bag of yard waste.
+   *
+   * `photoKey` is the honest-asset rule: where a service has no job photo of its own, the
+   * page falls back to a real asset described as exactly what it is (the truck), never a
+   * stock image and never a photo relabelled as work it does not show.
+   */
+  services: [
+    {
+      // Its slug IS the junk division home page — the grid card links there rather than
+      // to a duplicate page competing for the same query.
+      title: "General Junk Hauling",
+      slug: "junk-removal",
+      blurb: "One item or a whole property. You point at it, we carry it out.",
+      icon: Trash2,
+      photoKey: "job-03-carport-packed-full",
+    },
+    {
+      title: "Furniture Removal",
+      slug: "furniture-removal",
+      blurb: "Couches, mattresses, recliners, desks. Out of the room, not just the curb.",
+      icon: Sofa,
+      photoKey: "before-02-basement-estate-cleanout",
+    },
+    {
+      title: "Appliance Removal",
+      slug: "appliance-removal",
+      blurb: "Fridges, washers, dryers, water heaters. Disconnected and hauled.",
+      icon: WashingMachine,
+      photoKey: "job-02-basement-appliances",
+    },
+    {
+      title: "Estate Cleanouts",
+      slug: "estate-cleanouts",
+      blurb: "Whole-house clearing, handled quietly and without rushing you.",
+      icon: Home,
+      photoKey: "after-02-basement-estate-cleanout",
+    },
+    {
+      title: "Garage Cleanouts",
+      slug: "garage-cleanouts",
+      blurb: "Get the stall back. Decades of stacked boxes gone in an afternoon.",
+      icon: Warehouse,
+      // TODO PHOTO: no garage job photo exists. Falls back to the truck. See HANDOFF.md.
+      photoKey: "truck-01-dump-trailer-grand-rapids",
+    },
+    {
+      title: "Yard Waste Removal",
+      slug: "yard-waste-removal",
+      blurb: "Brush, branches, leaves and storm debris off the property for good.",
+      icon: Leaf,
+      photoKey: "after-01-brush-birch-grand-rapids",
+    },
+    {
+      title: "Construction Debris Removal",
+      slug: "construction-debris-removal",
+      blurb: "Remodel leftovers, torn-out flooring, drywall, lumber and shingles.",
+      icon: HardHat,
+      // TODO PHOTO: no construction job photo exists. Falls back to the truck.
+      photoKey: "truck-01-dump-trailer-grand-rapids",
+    },
+    {
+      title: "Hot Tub & Shed Removal",
+      slug: "hot-tub-and-shed-removal",
+      blurb: "Broken down, cut up and carried out. The heavy, awkward stuff.",
+      icon: Waves,
+      // TODO PHOTO: no hot tub or shed job photo exists. Falls back to the truck.
+      photoKey: "truck-01-dump-trailer-grand-rapids",
+    },
+  ] as Service[],
 
-  faqs: [] as Faq[],
+  /**
+   * Six FAQs, rendered visibly on the homepage. The FAQPage schema is built from EXACTLY
+   * this array — never a superset — so the markup can never claim a Q&A the page does not
+   * show.
+   *
+   * Every answer is grounded in a confirmed fact: the town list, the Mon-Sat 7-7 hours, the
+   * free-quote and upfront-pricing points from Trystan's own site, and the "you point, we
+   * load" pitch. There are no prices, no timeframes, no volume claims and no list of what
+   * is refused — we have not confirmed a disposal policy, so question 6 tells people to ask
+   * rather than inventing an answer.
+   */
+  faqs: [
+    {
+      id: "areas",
+      q: "What areas do you cover?",
+      a: "Grand Rapids and the surrounding Itasca County area, including Cohasset, Coleraine, Bovey, Marble, Taconite, Pengilly, Nashwauk, Deer River, Bigfork, Hill City, Remer and Pokegama Lake. If your town is not on that list, call anyway and you will get a straight answer.",
+    },
+    {
+      id: "cost",
+      q: "How much does junk removal cost?",
+      a: "Quotes are free. Tell us what you have and where it is, and you get a clear price before we start. What we quote is what you pay.",
+    },
+    {
+      id: "move-it",
+      q: "Do I have to move anything to the curb first?",
+      a: "No. That is the whole point. Leave it where it sits, point at it, and we carry it out. You do not lift, drag or load anything.",
+    },
+    {
+      id: "same-day",
+      q: "Can you come out today?",
+      a: "Same day service is available. Call or text early in the day and there is a good chance we can get to it, though it depends on what is already booked.",
+    },
+    {
+      id: "hours",
+      q: "What are your hours?",
+      a: "Monday through Saturday, 7am to 7pm. Call or text 218-256-1340 during those hours and you will reach Trystan directly.",
+    },
+    {
+      id: "what-we-take",
+      q: "What kind of junk do you take?",
+      a: "Furniture, appliances, yard waste and brush, construction debris, hot tubs and sheds, garage and estate cleanouts, and general household junk. If you are not sure whether we can take something, send a photo by text and we will tell you.",
+    },
+  ] as Faq[],
 
   gallery: {
     heading: "Before and after",
@@ -345,8 +509,8 @@ export const site = {
   },
 
   nav: [
-    { label: "Home", href: "/" },
-    { label: "Services", href: "/junk-removal" },
+    { label: "Junk Removal", href: "/junk-removal" },
+    { label: "Snow Removal", href: "/snow-removal" },
     { label: "Gallery", href: "/gallery" },
     { label: "Service Areas", href: "/service-areas" },
     { label: "Contact", href: "/contact" },
@@ -363,10 +527,25 @@ export const site = {
     url: "https://www.justjunkitmn.com",
     siteName: "Just Junk It",
     pages: {
+      /**
+       * `/` is now a two-way chooser, so its title is brand-led rather than keyword-led —
+       * the junk keywords belong to /junk-removal, which is the real landing page and the
+       * Google Ads destination. Splitting them stops the two pages competing.
+       */
       home: {
         path: "/",
+        title: `Just Junk It | Junk & Snow Removal, ${GEO_LEAD} MN`,
+        description: `Junk removal and snow removal in ${GEO_LEAD} and across ${GEO_REGION}, Minnesota. Locally owned, same day service available. Call or text ${PHONE_DISPLAY}.`,
+      },
+      junkHome: {
+        path: "/junk-removal",
         title: `Junk Removal in ${GEO_LEAD}, MN | Just Junk It`,
         description: `Junk removal and hauling in ${GEO_LEAD} and across ${GEO_REGION}. You point, we load, it's gone. Same day service available. Call or text ${PHONE_DISPLAY}.`,
+      },
+      snowHome: {
+        path: "/snow-removal",
+        title: `Snow Removal in ${GEO_LEAD}, MN | Just Junk It`,
+        description: `Snow removal in ${GEO_LEAD} and across ${GEO_REGION}, Minnesota. Locally owned and operated. Call or text ${PHONE_DISPLAY} to ask about winter availability.`,
       },
       gallery: {
         path: "/gallery",

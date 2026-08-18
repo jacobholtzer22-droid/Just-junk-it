@@ -1,152 +1,118 @@
-import { Phone, MessageSquare, Check } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight, Phone, MessageSquare, Snowflake, Trash2 } from "lucide-react";
 import { site } from "@/site.config";
 import { pageMetadata } from "@/lib/seo";
-import TelLink, { SmsLink } from "@/components/TelLink";
-import ContactForm from "@/components/ContactForm";
 import Photo from "@/components/Photo";
-import BeforeAfter from "@/components/BeforeAfter";
+import TelLink, { SmsLink } from "@/components/TelLink";
+import JsonLd from "@/components/JsonLd";
+import { breadcrumbSchema } from "@/lib/schema";
 
 export const metadata = pageMetadata("home");
 
+const ICONS = { junk: Trash2, snow: Snowflake } as const;
+
 /**
- * PARTIAL HOMEPAGE — deliberately not all ten sections yet.
+ * Two-way chooser between the junk and snow divisions.
  *
- * Present: hero, trust strip, before/after proof, how it works, why Just Junk It,
- * service area, quote form.
- * Still to come for GATE A: the eight-service "what we haul" grid, the FAQ block with
- * FAQPage schema, and the footer. Those wait on service copy, which is Phase 2 proper.
+ * DESIGN NOTE — why this still converts:
+ *   An interstitial before the content is normally a conversion tax, so this one is built
+ *   to cost as little as possible. The phone and text buttons sit ABOVE the two panels, so
+ *   a visitor who just wants to call never has to choose a division at all. Each panel is a
+ *   full-height link with a ~50vh target on a phone, which is unmissable with a thumb.
+ *
+ * SEO NOTE:
+ *   This page's title is brand-led, not keyword-led. The junk keywords belong to
+ *   /junk-removal, which is the real landing page and the Google Ads destination. If both
+ *   pages chased "junk removal grand rapids" they would compete with each other.
+ *
+ * The snow panel has no photograph because no snow photography exists. It renders as a
+ * type-and-colour panel instead — a deliberate design choice, not a hole where an image
+ * failed to load, and emphatically not a stock winter photo.
  */
-export default function HomePage() {
-  const { business, hero, trust, whyUs, howItWorks, contact, gallery, geo, serviceArea } = site;
+export default function ChooserPage() {
+  const { business, divisions } = site;
 
   return (
     <main>
-      {/* ---- Hero ------------------------------------------------------------ */}
-      <section className="border-b-2 border-paper/10">
-        <div className="mx-auto max-w-6xl px-5 pt-14 sm:px-6 sm:pt-20">
-          <h1 className="text-display-sm sm:text-display-lg lg:text-display-xl">{hero.h1}</h1>
-          <p className="mt-6 max-w-xl text-lg leading-relaxed text-paper/70 sm:text-xl">
-            {hero.sub}
-          </p>
-          <p className="mt-6 font-display text-2xl uppercase text-accent sm:text-3xl">
-            {business.tagline}
-          </p>
+      <section className="mx-auto max-w-6xl px-5 py-14 sm:px-6 sm:py-20">
+        <h1 className="text-display-sm sm:text-display-lg">{business.name}</h1>
+        <p className="mt-5 font-display text-2xl uppercase text-accent sm:text-3xl">
+          {business.tagline}
+        </p>
+        <p className="mt-6 max-w-xl text-lg leading-relaxed text-paper/70">
+          Locally owned in {business.city}, {business.state}, serving {site.geo.region}.
+          Pick what you need, or just call — you will get {business.ownerFirstName}, the
+          person who actually shows up.
+        </p>
 
-          {/* Tappable inside the first screen at 390px. */}
-          <div className="mt-9 grid gap-3 sm:max-w-lg sm:grid-cols-2">
-            <TelLink className="btn-accent px-6 py-4 text-xl">
-              <Phone className="h-5 w-5" strokeWidth={2.5} aria-hidden="true" />
-              {business.phoneDisplay}
-            </TelLink>
-            <SmsLink className="btn-outline px-6 py-4 text-xl">
-              <MessageSquare className="h-5 w-5" strokeWidth={2.5} aria-hidden="true" />
-              Text for a quote
-            </SmsLink>
-          </div>
-        </div>
-
-        {/* Full-bleed band, not a card. */}
-        <div className="mt-12 max-h-[52vh] overflow-hidden sm:max-h-[60vh]">
-          <Photo
-            photoKey={hero.photoKey}
-            sizes="100vw"
-            priority
-            className="block w-full object-cover"
-          />
+        {/* Above the chooser on purpose: nobody should have to pick a division to call. */}
+        <div className="mt-8 grid gap-3 sm:max-w-lg sm:grid-cols-2">
+          <TelLink className="btn-accent px-6 py-4 text-xl">
+            <Phone className="h-5 w-5" strokeWidth={2.5} aria-hidden="true" />
+            {business.phoneDisplay}
+          </TelLink>
+          <SmsLink className="btn-outline px-6 py-4 text-xl">
+            <MessageSquare className="h-5 w-5" strokeWidth={2.5} aria-hidden="true" />
+            Text us
+          </SmsLink>
         </div>
       </section>
 
-      {/* ---- Trust strip ------------------------------------------------------ */}
-      <section className="border-b-2 border-paper/10 bg-surface px-5 py-8 sm:px-6">
-        <ul className="mx-auto grid max-w-6xl gap-6 sm:grid-cols-3">
-          {trust.map((t) => (
-            <li key={t.label} className="flex gap-3">
-              <Check className="mt-1 h-5 w-5 shrink-0 text-accent" strokeWidth={3} aria-hidden="true" />
-              <div>
-                <p className="font-display text-xl uppercase text-paper">{t.label}</p>
-                <p className="mt-1 text-paper/60">{t.note}</p>
-              </div>
-            </li>
-          ))}
+      <section aria-labelledby="divisions-heading" className="border-t-2 border-paper/10">
+        <h2 id="divisions-heading" className="sr-only">
+          Choose a service
+        </h2>
+        <ul className="grid gap-px bg-paper/10 md:grid-cols-2">
+          {divisions.map((d) => {
+            const Icon = ICONS[d.key as keyof typeof ICONS];
+            return (
+              <li key={d.key} className="bg-ink">
+                <Link
+                  href={d.href}
+                  className="group relative flex min-h-[52vh] flex-col justify-end overflow-hidden p-7 sm:p-10 md:min-h-[62vh]"
+                >
+                  {d.photoKey ? (
+                    <>
+                      <div className="absolute inset-0">
+                        <Photo
+                          photoKey={d.photoKey}
+                          sizes="(min-width: 768px) 50vw, 100vw"
+                          className="h-full w-full object-cover opacity-45 transition-opacity duration-300 group-hover:opacity-60"
+                        />
+                      </div>
+                      {/* Keeps the type readable over any part of the photo. */}
+                      <div
+                        aria-hidden="true"
+                        className="absolute inset-0 bg-gradient-to-t from-ink via-ink/70 to-ink/25"
+                      />
+                    </>
+                  ) : null}
+
+                  <div className="relative">
+                    <Icon className="h-10 w-10 text-accent" strokeWidth={1.75} aria-hidden="true" />
+                    <p className="mt-4 font-display text-sm uppercase tracking-[0.25em] text-paper/55">
+                      {d.available}
+                    </p>
+                    <h3 className="mt-2 text-display-sm sm:text-display-md">{d.title}</h3>
+                    <p className="mt-3 max-w-sm text-lg leading-relaxed text-paper/75">
+                      {d.tagline}
+                    </p>
+                    <span className="mt-6 inline-flex items-center gap-2 font-display text-xl uppercase tracking-wide text-accent">
+                      {d.title}
+                      <ArrowRight
+                        className="h-5 w-5 transition-transform group-hover:translate-x-1"
+                        aria-hidden="true"
+                      />
+                    </span>
+                  </div>
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       </section>
 
-      {/* ---- Before / after proof --------------------------------------------- */}
-      <section className="px-5 py-16 sm:px-6 sm:py-20">
-        <div className="mx-auto max-w-6xl">
-          <h2 className="text-display-sm sm:text-display-md">{gallery.heading}</h2>
-          <p className="mt-4 max-w-2xl text-lg leading-relaxed text-paper/70">{gallery.body}</p>
-          <div className="mt-10 grid gap-8">
-            {gallery.pairs.map((p) => (
-              <BeforeAfter key={p.beforeKey} {...p} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ---- How it works ------------------------------------------------------ */}
-      <section className="border-y-2 border-paper/10 bg-surface px-5 py-16 sm:px-6 sm:py-20">
-        <div className="mx-auto max-w-6xl">
-          <h2 className="text-display-sm sm:text-display-md">How it works</h2>
-          <ol className="mt-10 grid gap-10 sm:grid-cols-3">
-            {howItWorks.map((s) => (
-              <li key={s.step}>
-                <span className="font-display text-display-md text-accent" aria-hidden="true">
-                  {s.step}
-                </span>
-                <h3 className="mt-2 text-2xl text-paper">{s.heading}</h3>
-                <p className="mt-2 leading-relaxed text-paper/65">{s.body}</p>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
-
-      {/* ---- Why Just Junk It --------------------------------------------------
-          Renders only when the config array is populated. The five points are verbatim
-          from Trystan's own site; nothing here is written by us. */}
-      {whyUs.length > 0 ? (
-        <section className="px-5 py-16 sm:px-6 sm:py-20">
-          <div className="mx-auto max-w-6xl">
-            <h2 className="text-display-sm sm:text-display-md">Why Just Junk It</h2>
-            <ul className="mt-10 grid gap-8 sm:grid-cols-2">
-              {whyUs.map((w) => (
-                <li key={w.heading} className="border-l-4 border-accent pl-5">
-                  <h3 className="text-2xl text-paper">{w.heading}</h3>
-                  <p className="mt-2 leading-relaxed text-paper/65">{w.body}</p>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
-      ) : null}
-
-      {/* ---- Service area ------------------------------------------------------ */}
-      <section className="border-y-2 border-paper/10 bg-surface px-5 py-16 sm:px-6 sm:py-20">
-        <div className="mx-auto max-w-6xl">
-          <h2 className="text-display-sm sm:text-display-md">{serviceArea.heading}</h2>
-          <p className="mt-4 max-w-2xl text-lg leading-relaxed text-paper/70">{serviceArea.body}</p>
-          {/* Real crawlable text, not an image or a map embed. */}
-          <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-3">
-            {geo.cities.map((c) => (
-              <li key={c} className="font-display text-xl uppercase text-paper/80">
-                {c}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      {/* ---- Quote form -------------------------------------------------------- */}
-      <section className="px-5 py-16 sm:px-6 sm:py-20">
-        <div className="mx-auto max-w-3xl">
-          <h2 className="text-display-sm sm:text-display-md">{contact.heading}</h2>
-          <p className="mt-4 text-lg leading-relaxed text-paper/70">{contact.body}</p>
-          <div className="mt-10">
-            <ContactForm />
-          </div>
-        </div>
-      </section>
+      <JsonLd data={breadcrumbSchema([{ name: "Home", path: "/" }])} />
     </main>
   );
 }

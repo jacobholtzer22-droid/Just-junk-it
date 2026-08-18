@@ -52,6 +52,56 @@ effect the moment the slug is non-empty.
 
 ---
 
+## ⚠ SNOW REMOVAL — needs facts before it can ship
+
+`/` is now a two-way chooser and `/snow-removal` exists, but **nothing about the snow
+service has been confirmed**. The page currently states only facts that are true of the
+business as a whole: name, phone, hours, towns. It has no service list, no equipment
+claim, no turnaround promise and no pricing, and `site.snow.services` is an empty array
+so that section does not render at all.
+
+It is built to look intentional while thin, and to absorb real copy without a redesign.
+Do not "finish" it by guessing.
+
+Ask Trystan these, in one message:
+
+| # | Question | Where the answer lands |
+|---|---|---|
+| 1 | What do you actually do — plow, shovel, blow, roofs, salt/sand? | `site.snow.services` |
+| 2 | Residential, commercial, or both? | snow page intro |
+| 3 | Same towns as junk removal, or a tighter radius for snow? | snow page service area |
+| 4 | Seasonal contracts, per-visit, or both? | snow page + FAQ |
+| 5 | Do you auto-trigger at a snow depth, or does the customer call each time? | snow page FAQ |
+| 6 | Any winter photos at all — truck with a plow, a cleared driveway? | `photoKey` on the snow division panel |
+
+Until #6 arrives the snow panel on `/` renders as a type-and-colour panel with no image.
+That is a deliberate design choice, not a broken image, and **not** a reason to drop in a
+stock winter photo.
+
+### SEO note on the chooser
+Putting an interstitial at `/` costs a click before any conversion path, so it is built to
+cost as little as possible: the call and text buttons sit **above** the two panels, so a
+visitor who just wants to phone never has to pick a division. The junk keywords were moved
+off `/` and onto `/junk-removal` so the two pages do not compete for the same query, and
+`/junk-removal` — not `/` — is the Google Ads landing destination.
+
+---
+
+## PHOTO REQUESTS — three service pages have no honest photo
+
+These pages currently fall back to the truck photo, described in alt text as exactly what
+it is. That is honest but weak. One message to Trystan covers all of it:
+
+| Page | Shot needed |
+|---|---|
+| Garage Cleanouts | A packed garage before, and the same garage empty after |
+| Construction Debris Removal | A remodel debris load — torn-out flooring, drywall, lumber |
+| Hot Tub & Shed Removal | A hot tub or shed mid-teardown, or loaded on the trailer |
+| Furniture Removal *(weak, not absent)* | A load of furniture on the trailer |
+| Snow Removal | Anything at all from winter — see above |
+
+---
+
 ## Google Ads tracking — fill in after the account exists
 
 Blank IDs, events wired and inert. Unlike the CRM slug these do **not** fail the build —

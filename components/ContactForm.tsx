@@ -270,7 +270,9 @@ export default function ContactForm() {
       </div>
 
       {/* TCPA consent. Real checkbox, default unchecked, never pre-ticked, required. */}
-      <div className="mt-6 flex items-start gap-3">
+      {/* The whole row is the target: the label is bound to the input, so tapping
+          anywhere in this 44px-min block toggles it. */}
+      <div className="mt-6 flex min-h-[44px] items-start gap-3 py-1">
         <input
           id="smsConsent"
           name="smsConsent"
@@ -279,9 +281,9 @@ export default function ContactForm() {
           onChange={(e) => setSmsConsent(e.target.checked)}
           aria-invalid={touched && !consentOk}
           aria-describedby={touched && !consentOk ? "consent-err" : undefined}
-          className="mt-0.5 h-6 w-6 shrink-0 cursor-pointer accent-accent"
+          className="h-11 w-11 shrink-0 cursor-pointer accent-accent"
         />
-        <label htmlFor="smsConsent" className="text-sm leading-relaxed text-paper/65">
+        <label htmlFor="smsConsent" className="cursor-pointer self-center text-sm leading-relaxed text-paper/65">
           {contact.consentLabel}
         </label>
       </div>
