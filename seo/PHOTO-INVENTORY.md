@@ -252,3 +252,32 @@ truck bed were not part of the job.
 ### Net result
 
 **Three pairs, four standalones, one honest non-job asset.**
+
+---
+
+## 7. STOCK IMAGES — snow removal only (added Aug 2026)
+
+The three files below are **the only stock imagery on the site**, added because the snow
+division launched in its first season with zero job photography. Rules they were
+selected under: scene shots only — **no operators, no plow trucks, no snowblowers, no
+branded equipment, no crews** — so nothing reads as "this is the crew I am hiring"; alt
+text describes the scene and never implies a job was performed; **stock never enters
+`/gallery`**. All three were downloaded from Pexels and viewed at full resolution before
+use (the dark shape in the driveway shot is a dog; the marks above the door in the steps
+shot are snow-clumped lattice, not signage — no faces, plates, house numbers or legible
+text in any frame). They went through the same pipeline as the job photos: AVIF primary +
+WebP fallback, same budgets, EXIF stripped and verified by `scripts/verify-photos.mjs`,
+intrinsic dimensions recorded in `lib/photo-manifest.ts`.
+
+**License, all three: the Pexels License** — free for commercial use, no attribution
+required, modification allowed. https://www.pexels.com/license/
+
+| Shipped file (`public/photos/`) | Scene | Source | Photographer |
+|---|---|---|---|
+| `stock-snow-01-driveway-pines.*` | Snow-covered driveway with tire tracks, house among pines | https://www.pexels.com/photo/house-in-forest-in-winter-17651159/ | Daniel Guti |
+| `stock-snow-02-entry-steps.*` | Deep fresh snow on front steps and entryway during snowfall | https://www.pexels.com/photo/snow-covered-entrance-with-frosted-trees-35836549/ | Sardarwali Rahmani |
+| `stock-snow-03-snowfall-street.*` | Snow falling over a quiet residential street | https://www.pexels.com/photo/snow-falling-on-the-roof-6577003/ | Lisa Fotios |
+
+Where each appears, and the swap plan for when real winter photos exist:
+HANDOFF.md → **SWAP AFTER FIRST SNOW**. Originals are kept in `Stock Photos/`
+(gitignored, like the job originals).

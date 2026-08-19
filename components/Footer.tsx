@@ -14,7 +14,17 @@ export default function Footer() {
     <footer className="border-t-2 border-paper/10 bg-surface px-5 py-14 sm:px-6">
       <div className="mx-auto grid max-w-6xl gap-10 sm:grid-cols-2 lg:grid-cols-4">
         <div>
-          <p className="font-display text-2xl uppercase text-paper">{business.name}</p>
+          {/* Transparent mark — sits clean on the lifted `surface` panel too, which is
+              why the logo asset keys its background out rather than baking black in.
+              Decorative: the business name is printed right below. */}
+          <img
+            src="/photos/logo-just-junk-it.webp"
+            alt=""
+            width={816}
+            height={512}
+            className="h-28 w-auto"
+          />
+          <p className="mt-4 font-display text-2xl uppercase text-paper">{business.name}</p>
           <p className="mt-3 leading-relaxed text-paper/65">{footer.tagline}</p>
           <p className="mt-4 font-display text-lg uppercase text-paper">{business.tagline}</p>
         </div>

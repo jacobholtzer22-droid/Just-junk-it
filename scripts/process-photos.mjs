@@ -121,6 +121,40 @@ const MANIFEST = [
     crop: { top: 0.28, left: 0.0, width: 0.42, height: 0.34 },
     alt: "The Just Junk It pickup and dump trailer parked at a job site in Grand Rapids, Minnesota.",
   },
+
+  // ---- STOCK — snow removal only (Aug 2026) --------------------------------------
+  // ⚠ THE ONLY STOCK IMAGES ON THE SITE, by explicit decision: the snow division's first
+  // season starts with zero job photography, and these hold the visual slots until real
+  // winter shots exist. THE RULES:
+  //   - Pexels only, licensed for commercial use, no attribution required. Source URL
+  //     and license for each file are recorded in seo/PHOTO-INVENTORY.md §7.
+  //   - Scene shots only: NO operators, NO plow trucks, NO snowblowers, NO branded
+  //     equipment — nothing a visitor could read as "this is the crew I am hiring".
+  //   - Alt text describes the scene and never implies a job was performed.
+  //   - These NEVER appear in /gallery. That page stays real jobs only.
+  //   - Swap after the first snowfall — see HANDOFF.md → SWAP AFTER FIRST SNOW.
+  // Sources live in "Stock Photos/" (gitignored, like the job originals).
+  {
+    srcDir: "Stock Photos",
+    ext: "jpg",
+    src: "pexels-17651159-snow-driveway",
+    out: "stock-snow-01-driveway-pines",
+    alt: "Snow-covered driveway with fresh tire tracks leading to a house among snowy pines.",
+  },
+  {
+    srcDir: "Stock Photos",
+    ext: "jpg",
+    src: "pexels-35836549-snow-steps",
+    out: "stock-snow-02-entry-steps",
+    alt: "Deep fresh snow covering the front steps and entryway of a building during a snowfall.",
+  },
+  {
+    srcDir: "Stock Photos",
+    ext: "jpg",
+    src: "pexels-6577003-snowfall-street",
+    out: "stock-snow-03-snowfall-street",
+    alt: "Snow falling over a quiet residential street of single-story houses in winter.",
+  },
 ];
 
 /**
@@ -189,10 +223,20 @@ async function main() {
   rmSync(OUT, { recursive: true, force: true });
   mkdirSync(OUT, { recursive: true });
 
-  const needed = [...new Set(MANIFEST.map((m) => m.src))];
-  console.log(`\nStage 1: decoding ${needed.length} HEIC files via sips…`);
-  for (const s of needed) {
-    execFileSync("sips", ["-s", "format", "png", `${SRC}/${s}.heic`, "--out", `${TMP}/${s}.png`], { stdio: "ignore" });
+  // Stage 1 normalises every source to a PNG intermediate. HEIC needs macOS sips (sharp's
+  // bundled libheif has no HEVC decoder — see the header comment); JPG stock sources go
+  // straight through sharp. Keyed per-entry so the two source folders can mix.
+  const needed = new Map();
+  for (const m of MANIFEST) {
+    needed.set(m.src, { dir: m.srcDir ?? SRC, ext: m.ext ?? "heic" });
+  }
+  console.log(`\nStage 1: decoding ${needed.size} source files to PNG…`);
+  for (const [s, { dir, ext }] of needed) {
+    if (ext === "heic") {
+      execFileSync("sips", ["-s", "format", "png", `${dir}/${s}.heic`, "--out", `${TMP}/${s}.png`], { stdio: "ignore" });
+    } else {
+      await sharp(`${dir}/${s}.${ext}`).png().toFile(`${TMP}/${s}.png`);
+    }
   }
 
   console.log(`Stage 2: AVIF + WebP for ${MANIFEST.length} images x ${VARIANTS.length} sizes…\n`);

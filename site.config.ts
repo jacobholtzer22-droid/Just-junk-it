@@ -7,6 +7,7 @@ import {
   HardHat,
   Waves,
   Trash2,
+  Snowflake,
   type LucideIcon,
 } from "lucide-react";
 
@@ -23,11 +24,10 @@ import {
  *   3. Anything wanted but unconfirmed stays a TODO here and never becomes a claim
  *      on the page. Unconfirmed items are listed in HANDOFF.md.
  *
- * DEMO MODE — read lib/require-live-config.ts before touching `crm.businessSlug`.
- *   This site currently ships as a DEMO for Trystan. There is no Neon Business row yet,
- *   so `crm.businessSlug` is deliberately an empty string and the form does not POST.
- *   A build-time guard makes it impossible to ship this state to production by accident.
- *   The three-step go-live swap is at the top of HANDOFF.md.
+ * LIVE MODE (Aug 2026) — read lib/require-live-config.ts before touching `crm.businessSlug`.
+ *   The Neon Business row exists; `crm.businessSlug` carries its verbatim slug and the
+ *   quote form POSTs for real. The build-time guard STAYS: it still fails the build on an
+ *   empty slug, and on a slug set while a stale NEXT_PUBLIC_DEMO_MODE=true is present.
  */
 
 export type SiteImage = {
@@ -169,12 +169,16 @@ export const site = {
   /**
    * TWO DIVISIONS. `/` is a chooser; each division has its own home page.
    *
-   * ⚠ SNOW REMOVAL IS UNVERIFIED. Nothing about the snow side has been confirmed by
-   * Trystan: not what he actually offers (plowing? shovelling? roofs? salting?), not
-   * whether the snow service area matches the junk one, not whether he takes seasonal
-   * contracts. `snow.services` is deliberately EMPTY and the snow page renders no service
-   * list until it is filled. The only claims on that page are facts confirmed for the
-   * business as a whole — name, phone, hours, towns. See HANDOFF.md → SNOW REMOVAL.
+   * SNOW REMOVAL WENT LIVE AUG 2026 on Jacob's instruction, on exactly these confirmed
+   * facts and NOTHING more: it is offered, this is the FIRST SEASON, the service area is
+   * the same Itasca County towns as junk, and quotes are free. Everything operational —
+   * plow vs shovel vs blow, salting, contracts, per-inch triggers, response times,
+   * commercial work, equipment — is still UNCONFIRMED and must not appear anywhere.
+   * The open questions live in HANDOFF.md → CLIENT QUESTIONS.
+   *
+   * The snow photography is STOCK (Pexels, scene-only, no crews or equipment) because
+   * the first season has no job photos yet. Sources + swap list: HANDOFF.md → SWAP
+   * AFTER FIRST SNOW. Stock never enters /gallery.
    */
   divisions: [
     {
@@ -190,8 +194,8 @@ export const site = {
       title: "Snow Removal",
       tagline: "Northern Minnesota winters, handled.",
       href: "/snow-removal",
-      // TODO PHOTO: no snow photography exists. Renders a type-only panel, never stock.
-      photoKey: "",
+      // STOCK (Pexels) until real winter photos exist — swap after first snow.
+      photoKey: "stock-snow-03-snowfall-street",
       available: "Winter season",
     },
   ],
@@ -199,9 +203,69 @@ export const site = {
   snow: {
     h1: `Snow Removal in ${GEO_LEAD}, MN`,
     sub: `Snow removal across ${GEO_REGION}, run by the same person who answers the phone.`,
-    /** ⚠ EMPTY ON PURPOSE — see the divisions comment. Do not populate without Trystan. */
-    services: [] as { title: string; blurb: string }[],
+    /**
+     * Every sentence here is grounded in a confirmed fact: first season (confirmed by
+     * Jacob), same owner and phone, year-round junk operation, free quotes, same towns.
+     * No equipment, scope, trigger-depth or turnaround claims — those are unconfirmed.
+     */
+    firstSeason: {
+      heading: "New this winter, not new to showing up",
+      body: [
+        "This is the first winter Just Junk It is taking on snow. We would rather tell you that straight than pretend to be something we are not — what you get is the same locally owned outfit that hauls junk across Itasca County all year, pointed at your snow.",
+        "You call the same number and you get Trystan, the person who actually does the work. Tell him where you are and what needs clearing, and you get a straight answer and a free quote — before anything gets cleared.",
+      ],
+    },
+    howItWorks: [
+      {
+        step: "1",
+        heading: "Call or text",
+        body: `Reach ${PHONE_DISPLAY} directly, Monday through Saturday, 7am to 7pm.`,
+      },
+      {
+        step: "2",
+        heading: "Tell us what needs clearing",
+        body: "Where you are and what the snow is sitting on. A rough description is fine.",
+      },
+      {
+        step: "3",
+        heading: "Get a straight answer",
+        body: "A free quote and a clear yes or no on whether we can get to you.",
+      },
+    ],
+    /** FAQ ids from `snowFaqs` below, rendered visibly and mirrored EXACTLY into schema. */
+    faqIds: ["snow-first-season", "snow-areas", "snow-cost", "snow-hours"],
+    /** Junk-side services cross-linked at the bottom of the snow page. */
+    related: ["yard-waste-removal", "garage-cleanouts", "junk-removal"],
   },
+
+  /**
+   * Snow-page FAQs. SEPARATE from `faqs` on purpose: the junk home page renders the whole
+   * `faqs` array, so snow questions in that array would leak onto the junk page. The
+   * FAQPage schema on /snow-removal is built from EXACTLY this list.
+   * Grounded facts only — first season, towns, free quotes, hours. Nothing operational.
+   */
+  snowFaqs: [
+    {
+      id: "snow-first-season",
+      q: "Is this your first season doing snow?",
+      a: "Yes, and we would rather say so than pretend otherwise. Just Junk It has hauled junk across Grand Rapids and Itasca County year round — snow is the winter side of the same locally owned business. You call the same number and deal with the same person.",
+    },
+    {
+      id: "snow-areas",
+      q: "Where do you clear snow?",
+      a: "The same area as the junk side: Grand Rapids and the surrounding Itasca County towns, including Cohasset, Coleraine, Bovey, Deer River, Nashwauk and Pokegama Lake. If your town is not on the list, call anyway and you will get a straight answer.",
+    },
+    {
+      id: "snow-cost",
+      q: "What does snow removal cost?",
+      a: "Quotes are free. Tell us where you are and what needs clearing, and you get a clear number before any work starts.",
+    },
+    {
+      id: "snow-hours",
+      q: "When can I reach you?",
+      a: "Monday through Saturday, 7am to 7pm. Call or text 218-256-1340 during those hours and you will reach Trystan directly.",
+    },
+  ] as Faq[],
 
   cta: {
     callLabel: "Call",
@@ -430,7 +494,7 @@ export const site = {
         "Making space before winter"
       ],
       faqIds: ["move-it", "cost", "same-day", "areas"],
-      related: ["estate-cleanouts", "construction-debris-removal", "junk-removal"],
+      related: ["estate-cleanouts", "snow-removal", "junk-removal"],
     },
     {
       title: "Yard Waste Removal",
@@ -456,7 +520,7 @@ export const site = {
         "A brush pile that has been sitting since last season"
       ],
       faqIds: ["areas", "cost", "same-day", "move-it"],
-      related: ["construction-debris-removal", "junk-removal", "garage-cleanouts"],
+      related: ["construction-debris-removal", "snow-removal", "junk-removal"],
     },
     {
       title: "Construction Debris Removal",
@@ -512,6 +576,20 @@ export const site = {
       ],
       faqIds: ["cost", "move-it", "areas", "what-we-take"],
       related: ["yard-waste-removal", "construction-debris-removal", "junk-removal"],
+    },
+    {
+      /**
+       * THE SNOW DIVISION'S ENTRY (Aug 2026). Lives in this array so the footer service
+       * list, sitemap machinery and `related` cross-links can all resolve it — but its
+       * page is app/snow-removal/page.tsx (the division home), NOT lib/service-page.tsx,
+       * and ServicesGrid deliberately filters it out of the junk page's "What we haul"
+       * grid. No metaTitle/covers here: the snow page pulls its copy from `snow` above.
+       */
+      title: "Snow Removal",
+      slug: "snow-removal",
+      blurb: "First season on the snow. Same guy, same straight answers, free quotes.",
+      icon: Snowflake,
+      photoKey: "stock-snow-01-driveway-pines",
     },
   ] as Service[],
 
@@ -734,23 +812,20 @@ export const site = {
   crm: {
     url: "https://www.alignandacquire.com/api/contact",
     /**
-     * DEMO BUILD — intentionally empty. There is no Neon Business row for Just Junk It yet.
+     * LIVE (Aug 2026). The Business row exists in the platform database and this is its
+     * slug, supplied by Jacob as a verbatim literal. The form POSTs for real.
      *
-     * Empty string means:
-     *   - the form validates, honeypots, requires consent, shows loading and success,
-     *     and does NOT POST (see components/ContactForm.tsx)
-     *   - `next build` FAILS unless NEXT_PUBLIC_DEMO_MODE=true
-     *     (see lib/require-live-config.ts)
-     *
-     * GO LIVE: create the Neon Business row, paste its verbatim slug here, then delete
-     * the NEXT_PUBLIC_DEMO_MODE env var. The live POST is already written and takes
-     * effect the moment this string is non-empty. No code change, no rebuild of logic.
+     * ⚠ Hardcoded string literal ON PURPOSE — no env var, no fallback, no `??`. The
+     * build-time guard (lib/require-live-config.ts + scripts/preflight.mjs) reads this
+     * exact literal and still protects the two bad states: empty slug, and a slug set
+     * while a stale NEXT_PUBLIC_DEMO_MODE=true is present. Do not delete the guard.
      *
      * The endpoint returns HTTP 200 even when businessSlug matches no Business row, so a
-     * WRONG slug is silent lead loss and a green success message proves nothing. Verify
-     * against the live Neon row and send one real test submission.
+     * WRONG slug is silent lead loss and a green success message proves nothing. If this
+     * value ever changes, verify against the live Neon row and send one real test
+     * submission that lands as a WebsiteLead in the dashboard.
      */
-    businessSlug: "",
+    businessSlug: "just-junk-it",
   },
 
   ads: {

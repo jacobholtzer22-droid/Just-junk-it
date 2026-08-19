@@ -29,6 +29,11 @@ out/
 # ---------------------------------------------------------------------------
 Trystan Photos/
 
+# Stock photo ORIGINALS (snow placeholders) — same treatment as the job originals: the
+# processed, downscaled files in public/photos/ are what ships. Sources + licenses are
+# recorded in seo/PHOTO-INVENTORY.md section 7.
+Stock Photos/
+
 # Photo pipeline scratch
 .photo-tmp/
 .vercel

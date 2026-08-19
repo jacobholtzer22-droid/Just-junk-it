@@ -20,20 +20,31 @@ export default function Header() {
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-4 sm:px-6">
         {/*
           Logo image + text wordmark together. The image is DECORATIVE (empty alt): the
-          accessible name is the wordmark text right beside it, so screen readers hear
+          accessible name is the wordmark span right beside it, so screen readers hear
           "Just Junk It" once, not twice. Real width/height attrs -> zero layout shift.
-          The lockup's own lettering is too small to read at header size, which is why
-          the wordmark stays — it is the legible name, the logo is the brand mark.
+
+          AUG 2026: the logo grew to h-16/h-20 so it anchors the bar instead of sitting
+          small beside the menu toggle — and at that size the lockup's own banner
+          lettering carries the name, so the text wordmark is sr-only except on `lg`,
+          where the bar has room for it on one line. Below that, logo + wordmark + nav
+          (or the 320px toggle row) either overflow or force the brand name to wrap.
         */}
-        <Link href="/" className="-my-2 flex min-h-[44px] items-center gap-3 py-2 font-display text-2xl uppercase leading-none tracking-tight text-paper sm:text-3xl">
+        <Link
+          href="/"
+          aria-label="Just Junk It — home"
+          className="-my-2 flex min-h-[44px] items-center gap-3 py-2 font-display text-2xl uppercase leading-none tracking-tight text-paper sm:text-3xl"
+        >
           <img
             src="/photos/logo-just-junk-it.webp"
             alt=""
-            width={509}
-            height={320}
-            className="h-12 w-auto sm:h-14"
+            width={816}
+            height={512}
+            className="h-16 w-auto sm:h-20"
           />
-          Just Junk It
+          {/* Purely visual (the link's aria-label is the accessible name). */}
+          <span className="hidden whitespace-nowrap lg:inline" aria-hidden="true">
+            Just Junk It
+          </span>
         </Link>
 
         {/* Desktop nav */}

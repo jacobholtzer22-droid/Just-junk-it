@@ -23,11 +23,17 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        ink: "#0B0B0C", // page base, near-black
+        // THE SAMPLED LOGO BLACK — not an aesthetic choice. scripts/process-logo.mjs
+        // measures the logo file's background (mode of its border ring) and prints this
+        // value on every run; the token must match it exactly so the mark merges with
+        // the page instead of sitting in a box. Was #0B0B0C, which was 11 levels lighter
+        // than the logo field and visibly boxed it. If the logo file ever changes,
+        // re-run the script and move this token to whatever it prints.
+        ink: "#010000", // page base = sampled logo black
         surface: "#141416", // lifted panels, form background
         paper: "#F2F0EB", // primary text, warm off-white
         accent: "#C1272D", // logo red — fills w/ paper text, icons, LARGE type only
-        danger: "#FFB020", // errors only — amber, 10.8:1 on ink, cannot be mistaken for the red CTAs
+        danger: "#FFB020", // errors only — amber, >10:1 on ink, cannot be mistaken for the red CTAs
       },
       fontFamily: {
         display: ["var(--font-display)", "Impact", "sans-serif"],

@@ -2,29 +2,24 @@
 
 ---
 
-## ⚠️ GO LIVE CHECKLIST — four steps, in order
+## ✅ GO LIVE — steps 1–3 DONE (Aug 18, 2026). Demo mode is retired.
 
-**This site is currently a DEMO, deployed to Production on the vercel.app domain** so
-the owner has one clean, stable link: `https://just-junk-it.vercel.app`. The quote form
-validates, honeypots, requires SMS consent, shows loading, and shows the real success
-screen — but it does **not** send anywhere, because there is no Neon Business row for
-Just Junk It yet.
-
-Nothing on the page says so. That is deliberate: Trystan is being shown his website,
-not a caveat.
-
-| # | Step | Where |
+| # | Step | Status |
 |---|---|---|
-| **1** | Create the Business row for Just Junk It in Neon. | Neon / admin panel |
-| **2** | Paste its **verbatim** slug into `crm.businessSlug`. | [`site.config.ts`](site.config.ts) |
-| **3** | Delete the `NEXT_PUBLIC_DEMO_MODE` env var from **every** Vercel environment, then redeploy **without build cache**. | Vercel → Project → Settings → Environment Variables |
-| **4** | Only then point `justjunkitmn.com` DNS at this project. | Registrar / Vercel Domains |
+| **1** | Create the Business row for Just Junk It in Neon. | ✅ Done — slug `just-junk-it` |
+| **2** | Paste its **verbatim** slug into `crm.businessSlug`. | ✅ Done — hardcoded literal in [`site.config.ts`](site.config.ts), no env var, no fallback |
+| **3** | Delete `NEXT_PUBLIC_DEMO_MODE` from **every** Vercel environment. | ✅ Done — removed from Production, Preview, and the local `.env.local` |
+| **4** | Point `justjunkitmn.com` DNS at this project. | ⏳ **NOT YET — the client has not approved the site.** Production stays on the vercel.app domain until he does. |
 
-**Copy the slug from the live row — do not retype it from memory.** The CRM endpoint
-returns HTTP 200 even when `businessSlug` matches no Business row, so a wrong slug is
-silent lead loss that looks identical to a working form. After step 3, send one real
-test submission and confirm it lands as a WebsiteLead in the dashboard. A green success
-message proves nothing on its own.
+The form POSTs for real now: `{ name, phone, email, message, smsConsent, businessSlug }`
+to `https://www.alignandacquire.com/api/contact`, honeypot checked locally and never in
+the body. **Remaining launch check:** the endpoint returns HTTP 200 even for a slug that
+matches no Business row, so send one real test submission and confirm it lands as a
+WebsiteLead in the platform dashboard. A green success message proves nothing on its own.
+
+**The guard stays.** It still fails the build on an empty slug, and on a slug set while a
+stale `NEXT_PUBLIC_DEMO_MODE=true` is present (both re-verified by running the builds at
+go-live). Do not remove it — it is what makes a silent regression to demo state impossible.
 
 ### The guard is domain-aware — and refusing to build on a custom domain is intentional
 
@@ -70,15 +65,34 @@ effect the moment the slug is non-empty.
 
 ---
 
-## LOGO — file needed, palette already matched
+## LOGO — reworked Aug 2026: transparency keyed, base color matched to the mark
 
-**RESOLVED — Jacob supplied the file** (`Trystan Photos/6C81F79C-…PNG`, 1536×1024).
-`scripts/process-logo.mjs` trims the black margin and emits two committed assets:
-`public/photos/logo-just-junk-it.webp` (header, 2x) and `logo-just-junk-it-og.png`
-(1200×630 link-preview card, PNG because scrapers have patchy WebP support). The header
-shows the logo beside the text wordmark — the image is decorative to screen readers, so
-the name is announced once. Note the ORIGINAL sits in "Trystan Photos/", which is
-gitignored with the job-photo originals; the processed copies are what gets committed.
+**The source file** (`Trystan Photos/6C81F79C-…PNG`, 1536×1024) **is a raster with a
+baked-in near-black background and no alpha channel** — flagged at rework time because
+that normally makes clean blending impossible. Two things made it fixable: the
+background is uniform (sampled programmatically as **`#010000`**, the mode of the border
+ring — printed by `scripts/process-logo.mjs` on every run), and every surface the mark
+sits on is near-black, where keying artifacts are invisible.
+
+The fix, both halves in `scripts/process-logo.mjs`:
+
+1. **The site's base token `ink` is now the sampled `#010000`** (was `#0B0B0C`, 11
+   levels lighter — the visible box around the logo). One place: `tailwind.config.ts`.
+   Two hardcoded copies of the old value were found and fixed: `themeColor` in
+   `app/layout.tsx` and the favicon background in `app/icon.svg` (which was also still
+   carrying the retired `#FFD400` yellow — now paper `#F2F0EB`).
+2. **The exterior background is flood-filled to real transparency** from the image
+   border, so the lockup also sits clean on `surface` panels (the footer) and beside
+   type. Contrast for the whole palette was re-verified against the new base — every
+   pair passes its bar (paper on ink 18.4:1, accent-on-ink 3.59:1 for icons/large type,
+   paper-on-accent buttons 5.13:1). Note the accent is the logo red `#C1272D`; the old
+   `#FFD400` yellow left the palette in the Aug 2026 recolor.
+
+**Placements** (all with real intrinsic `width`/`height`, zero layout shift): header
+h-16 mobile / h-20 desktop (wordmark goes sr-only below `sm` so nothing overflows at
+320px), `/` chooser hero right column (md+), `/junk-removal` hero beside the H1 (lg+),
+footer h-28. A divider/watermark placement was tried against the design and skipped —
+the hard-edged 2px-grid layout reads cluttered with a fifth mark.
 
 The site palette was rebuilt from the logo in Aug 2026: accent is the logo's border red
 `#C1272D`, chosen over the deeper banner red (~`#8E1215`) because the deep red measures
@@ -129,31 +143,50 @@ key ever appears.
 
 ---
 
-## ⚠ SNOW REMOVAL — needs facts before it can ship
+## SNOW REMOVAL — LIVE (Aug 2026), first season, built on confirmed facts only
 
-`/` is now a two-way chooser and `/snow-removal` exists, but **nothing about the snow
-service has been confirmed**. The page currently states only facts that are true of the
-business as a whole: name, phone, hours, towns. It has no service list, no equipment
-claim, no turnaround promise and no pricing, and `site.snow.services` is an empty array
-so that section does not render at all.
+`/snow-removal` is now a full service page, shipped on Jacob's instruction. What it
+claims — and ALL it claims: snow removal is offered, **this is the first season** (said
+plainly on the page; local-and-new beats pretending), the service area is the same
+Itasca County towns as junk, quotes are free, and the business-wide facts (owner, phone,
+Mon–Sat 7–7). It has its own FAQ block with FAQPage schema (4 questions, mirrored
+exactly), Service schema, a footer service link, the `/` chooser panel photo, and
+cross-links from Yard Waste and Garage Cleanouts.
 
-It is built to look intentional while thin, and to absorb real copy without a redesign.
-Do not "finish" it by guessing.
+Nothing operational is claimed anywhere, because none of it is confirmed — see CLIENT
+QUESTIONS below. When Trystan answers, the copy slots in without a redesign.
 
-Ask Trystan these, in one message:
+### CLIENT QUESTIONS — snow specifics still needed from Trystan, one line each
 
-| # | Question | Where the answer lands |
-|---|---|---|
-| 1 | What do you actually do — plow, shovel, blow, roofs, salt/sand? | `site.snow.services` |
-| 2 | Residential, commercial, or both? | snow page intro |
-| 3 | Same towns as junk removal, or a tighter radius for snow? | snow page service area |
-| 4 | Seasonal contracts, per-visit, or both? | snow page + FAQ |
-| 5 | Do you auto-trigger at a snow depth, or does the customer call each time? | snow page FAQ |
-| 6 | Any winter photos at all — truck with a plow, a cleared driveway? | `photoKey` on the snow division panel |
+- What does he actually do — plow, shovel, snow-blow, roofs, or some mix?
+- Salting or sanding: offered at all?
+- Residential only, commercial, or both?
+- Seasonal contracts, per-visit, or both — and does he want that on the page?
+- Auto-trigger at a snow depth, or does the customer call each time?
+- Any response-time expectation he is comfortable committing to in writing?
+- Same full town list as junk, or a tighter radius when it is snowing?
+- What equipment does he run (only if he wants it mentioned)?
+- Pricing structure he wants stated publicly, if any (page currently says free quotes only)?
 
-Until #6 arrives the snow panel on `/` renders as a type-and-colour panel with no image.
-That is a deliberate design choice, not a broken image, and **not** a reason to drop in a
-stock winter photo.
+### SWAP AFTER FIRST SNOW — stock images to replace with real job photos
+
+The snow surfaces launched with **three stock images** (the only stock on the site —
+every other photo is Trystan's real work). They are scene shots with no people and no
+equipment, licensed for commercial use (sources + licenses in
+[`seo/PHOTO-INVENTORY.md`](seo/PHOTO-INVENTORY.md) §7). **After the first real snowfall
+with a camera on site, replace all three:**
+
+| File (all in `public/photos/`, AVIF + WebP + 800px variants) | Where it appears |
+|---|---|
+| `stock-snow-01-driveway-pines.*` | `/snow-removal` hero photo band |
+| `stock-snow-02-entry-steps.*` | `/snow-removal` band between FAQ and cross-links |
+| `stock-snow-03-snowfall-street.*` | The snow division panel on `/` (the chooser) |
+
+To swap: drop the real photos into `Stock Photos/`'s place in
+`scripts/process-photos.mjs` (or better, into `Trystan Photos/` as normal job entries),
+update the three MANIFEST entries, run `npm run photos`, and update §7 of the photo
+inventory. **Stock never enters `/gallery`** — that page stays real jobs only, and the
+`stock-` filename prefix exists so any violation is one grep away.
 
 ### SEO note on the chooser
 Putting an interstitial at `/` costs a click before any conversion path, so it is built to

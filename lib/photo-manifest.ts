@@ -148,6 +148,42 @@ export const photos: readonly Photo[] = [
     "smallWidth": 800,
     "smallHeight": 486,
     "alt": "The Just Junk It pickup and dump trailer parked at a job site in Grand Rapids, Minnesota."
+  },
+  {
+    "key": "stock-snow-01-driveway-pines",
+    "avif": "/photos/stock-snow-01-driveway-pines.avif",
+    "webp": "/photos/stock-snow-01-driveway-pines.webp",
+    "width": 1067,
+    "height": 1600,
+    "smallAvif": "/photos/stock-snow-01-driveway-pines-800.avif",
+    "smallWebp": "/photos/stock-snow-01-driveway-pines-800.webp",
+    "smallWidth": 533,
+    "smallHeight": 800,
+    "alt": "Snow-covered driveway with fresh tire tracks leading to a house among snowy pines."
+  },
+  {
+    "key": "stock-snow-02-entry-steps",
+    "avif": "/photos/stock-snow-02-entry-steps.avif",
+    "webp": "/photos/stock-snow-02-entry-steps.webp",
+    "width": 900,
+    "height": 1600,
+    "smallAvif": "/photos/stock-snow-02-entry-steps-800.avif",
+    "smallWebp": "/photos/stock-snow-02-entry-steps-800.webp",
+    "smallWidth": 450,
+    "smallHeight": 800,
+    "alt": "Deep fresh snow covering the front steps and entryway of a building during a snowfall."
+  },
+  {
+    "key": "stock-snow-03-snowfall-street",
+    "avif": "/photos/stock-snow-03-snowfall-street.avif",
+    "webp": "/photos/stock-snow-03-snowfall-street.webp",
+    "width": 1067,
+    "height": 1600,
+    "smallAvif": "/photos/stock-snow-03-snowfall-street-800.avif",
+    "smallWebp": "/photos/stock-snow-03-snowfall-street-800.webp",
+    "smallWidth": 533,
+    "smallHeight": 800,
+    "alt": "Snow falling over a quiet residential street of single-story houses in winter."
   }
 ];
 

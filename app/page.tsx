@@ -34,28 +34,44 @@ export default function ChooserPage() {
 
   return (
     <main>
-      <section className="mx-auto max-w-6xl px-5 py-14 sm:px-6 sm:py-20">
-        <h1 className="text-display-sm sm:text-display-lg">{business.name}</h1>
-        <p className="mt-5 font-display text-2xl uppercase text-accent sm:text-3xl">
-          {business.tagline}
-        </p>
-        <p className="mt-6 max-w-xl text-lg leading-relaxed text-paper/70">
-          Locally owned in {business.city}, {business.state}, serving {site.geo.region}.
-          Pick what you need, or just call — you will get {business.ownerFirstName}, the
-          person who actually shows up.
-        </p>
+      <section className="mx-auto grid max-w-6xl items-center gap-10 px-5 py-14 sm:px-6 sm:py-20 md:grid-cols-[1fr_auto]">
+        <div>
+          <h1 className="text-display-sm sm:text-display-lg">{business.name}</h1>
+          <p className="mt-5 font-display text-2xl uppercase text-accent sm:text-3xl">
+            {business.tagline}
+          </p>
+          <p className="mt-6 max-w-xl text-lg leading-relaxed text-paper/70">
+            Locally owned in {business.city}, {business.state}, serving {site.geo.region}.
+            Pick what you need, or just call — you will get {business.ownerFirstName}, the
+            person who actually shows up.
+          </p>
 
-        {/* Above the chooser on purpose: nobody should have to pick a division to call. */}
-        <div className="mt-8 grid gap-3 sm:max-w-lg sm:grid-cols-2">
-          <TelLink className="btn-accent px-6 py-4 text-xl">
-            <Phone className="h-5 w-5" strokeWidth={2.5} aria-hidden="true" />
-            {business.phoneDisplay}
-          </TelLink>
-          <SmsLink className="btn-outline px-6 py-4 text-xl">
-            <MessageSquare className="h-5 w-5" strokeWidth={2.5} aria-hidden="true" />
-            Text us
-          </SmsLink>
+          {/* Above the chooser on purpose: nobody should have to pick a division to call. */}
+          <div className="mt-8 grid gap-3 sm:max-w-lg sm:grid-cols-2">
+            <TelLink className="btn-accent px-6 py-4 text-xl">
+              <Phone className="h-5 w-5" strokeWidth={2.5} aria-hidden="true" />
+              {business.phoneDisplay}
+            </TelLink>
+            <SmsLink className="btn-outline px-6 py-4 text-xl">
+              <MessageSquare className="h-5 w-5" strokeWidth={2.5} aria-hidden="true" />
+              Text us
+            </SmsLink>
+          </div>
         </div>
+
+        {/*
+          The brand mark as a real hero element (transparent, sits directly on ink — the
+          base token IS the logo's sampled black, so it merges with the page). Decorative:
+          the H1 beside it already says the name. md+ only — on a phone the enlarged
+          header logo is inches away and a second mark here read as clutter.
+        */}
+        <img
+          src="/photos/logo-just-junk-it.webp"
+          alt=""
+          width={816}
+          height={512}
+          className="hidden h-52 w-auto md:block lg:h-64"
+        />
       </section>
 
       <section aria-labelledby="divisions-heading" className="border-t-2 border-paper/10">

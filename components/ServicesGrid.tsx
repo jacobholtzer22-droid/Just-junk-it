@@ -12,7 +12,11 @@ import { site } from "@/site.config";
  * Each panel is a full-height link — the whole rectangle is the target, not just the words.
  */
 export default function ServicesGrid() {
-  const { services } = site;
+  // Snow lives in site.services so the footer and cross-links can resolve it, but it is
+  // not something we HAUL — this grid sits under "What we haul" on the junk division
+  // home, so the snow card is filtered out (and 8 junk panels keep the 2x4 grid exact).
+  // Snow's front-door placements are the `/` chooser panel and the nav.
+  const services = site.services.filter((s) => s.slug !== "snow-removal");
   return (
     <ul className="mt-10 grid gap-px border-2 border-paper/10 bg-paper/10 sm:grid-cols-2 lg:grid-cols-4">
       {services.map((s) => {

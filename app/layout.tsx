@@ -54,7 +54,8 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   // Zoom is never disabled.
-  themeColor: "#0B0B0C",
+  // Matches the `ink` token — the sampled logo black. See tailwind.config.ts.
+  themeColor: "#010000",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

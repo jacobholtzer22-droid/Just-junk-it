@@ -1,33 +1,44 @@
-import { Phone, MessageSquare, Clock, MapPin } from "lucide-react";
+import Link from "next/link";
+import { Phone, MessageSquare, Clock, MapPin, ArrowRight } from "lucide-react";
 import { site } from "@/site.config";
 import { pageMetadata } from "@/lib/seo";
 import TelLink, { SmsLink } from "@/components/TelLink";
 import ContactForm from "@/components/ContactForm";
+import Photo from "@/components/Photo";
+import Faq from "@/components/Faq";
+import CtaBand from "@/components/CtaBand";
+import ScrollReveal from "@/components/ScrollReveal";
 import JsonLd from "@/components/JsonLd";
-import { breadcrumbSchema, serviceSchema } from "@/lib/schema";
+import { breadcrumbSchema, faqSchema, serviceSchema } from "@/lib/schema";
 
 export const metadata = pageMetadata("snowHome");
 
 /**
- * ⚠ SNOW REMOVAL — DELIBERATELY THIN. DO NOT "FINISH" THIS BY GUESSING.
+ * SNOW REMOVAL — the winter division home, live for the 2026–27 season.
  *
- * Nothing about the snow side has been confirmed by Trystan. We do not know whether he
- * plows, shovels, does roofs or salts; whether he takes seasonal contracts or one-offs;
- * whether the snow service area matches the junk one; or what equipment he runs. There is
- * also no snow photography — every supplied photo was shot between May and July.
+ * WHAT THIS PAGE MAY CLAIM (all confirmed via Jacob, Aug 2026): snow removal is offered;
+ * this is the FIRST season; the service area is the same Itasca County towns as the junk
+ * side; quotes are free; phone, hours and owner are the business-wide facts. The page
+ * says "first season" plainly — local and new beats pretending.
  *
- * So this page states ONLY facts confirmed for the business as a whole: who he is, the
- * phone number, the hours, the towns. There is no service list, no equipment claim, no
- * turnaround promise and no pricing. `site.snow.services` is empty and the list below does
- * not render until it is filled.
+ * WHAT IT MUST NOT CLAIM, because none of it is confirmed: plow vs shovel vs blow,
+ * roofs, salting/sanding, seasonal contracts vs per-visit, trigger depths, response
+ * times, commercial capability, equipment. Open questions: HANDOFF.md → CLIENT QUESTIONS.
  *
- * That is why the page leans on type and the CTA rather than a features grid — it is built
- * to look intentional while thin, and to absorb real copy without a redesign.
- *
- * What is needed from Trystan is itemised in HANDOFF.md → SNOW REMOVAL.
+ * PHOTOS ARE STOCK (Pexels, commercial license, recorded in seo/PHOTO-INVENTORY.md §7):
+ * scene shots only — no operators, no plow trucks, no equipment — because every OTHER
+ * image on this site is the client's real work and a stock crew photo would read as his.
+ * Swap list: HANDOFF.md → SWAP AFTER FIRST SNOW. Stock never enters /gallery.
  */
 export default function SnowRemovalPage() {
-  const { business, geo, snow, seo } = site;
+  const { business, geo, snow, snowFaqs, seo } = site;
+
+  // Same render-what-you-mark discipline as lib/service-page.tsx: the array rendered
+  // below IS the array handed to faqSchema.
+  const pageFaqs = snow.faqIds.map((id) => snowFaqs.find((f) => f.id === id)!).filter(Boolean);
+  const related = snow.related
+    .map((r) => site.services.find((x) => x.slug === r)!)
+    .filter(Boolean);
 
   return (
     <main>
@@ -73,26 +84,53 @@ export default function SnowRemovalPage() {
         </div>
       </section>
 
-      {/* Renders nothing until Trystan confirms what the snow service actually includes. */}
-      {snow.services.length > 0 ? (
-        <section className="px-5 py-16 sm:px-6 sm:py-20">
-          <div className="mx-auto max-w-6xl">
-            <h2 className="text-display-sm sm:text-display-md">What we do</h2>
-            <ul className="mt-10 grid gap-8 sm:grid-cols-2">
-              {snow.services.map((s) => (
-                <li key={s.title} className="border-l-4 border-accent pl-5">
-                  <h3 className="text-2xl text-paper">{s.title}</h3>
-                  <p className="mt-2 leading-relaxed text-paper/65">{s.blurb}</p>
+      {/* Full-bleed winter band. STOCK scene (see the header comment) — no crew, no rig. */}
+      <section className="border-b-2 border-paper/10">
+        <div className="max-h-[52vh] overflow-hidden">
+          <Photo
+            photoKey="stock-snow-01-driveway-pines"
+            sizes="100vw"
+            className="block w-full object-cover"
+          />
+        </div>
+      </section>
+
+      {/* First-season honesty + how it works. */}
+      <section className="px-5 py-16 sm:px-6 sm:py-20">
+        <div className="mx-auto grid max-w-6xl items-start gap-12 lg:grid-cols-2">
+          <ScrollReveal>
+            <h2 className="text-display-sm sm:text-display-md">{snow.firstSeason.heading}</h2>
+            {snow.firstSeason.body.map((p) => (
+              <p key={p.slice(0, 24)} className="mt-6 text-lg leading-relaxed text-paper/75">
+                {p}
+              </p>
+            ))}
+          </ScrollReveal>
+          <ScrollReveal delay={90}>
+            <ol className="grid gap-8">
+              {snow.howItWorks.map((s) => (
+                <li key={s.step} className="flex gap-5">
+                  <span className="font-display text-display-sm leading-none text-accent" aria-hidden="true">
+                    {s.step}
+                  </span>
+                  <div>
+                    <h3 className="text-2xl text-paper">{s.heading}</h3>
+                    <p className="mt-2 leading-relaxed text-paper/65">{s.body}</p>
+                  </div>
                 </li>
               ))}
-            </ul>
-          </div>
-        </section>
-      ) : null}
+            </ol>
+          </ScrollReveal>
+        </div>
+      </section>
 
       <section className="border-t-2 border-paper/10 bg-surface px-5 py-16 sm:px-6 sm:py-20">
         <div className="mx-auto max-w-6xl">
           <h2 className="text-display-sm sm:text-display-md">Where we work</h2>
+          <p className="mt-4 max-w-2xl text-lg leading-relaxed text-paper/70">
+            Same ground the junk side covers all year: based in {geo.lead}, working across{" "}
+            {geo.region}. Not on the list? Call anyway — if it is close, we will tell you straight.
+          </p>
           <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-3">
             {geo.cities.map((c) => (
               <li key={c} className="font-display text-xl uppercase text-paper/80">
@@ -103,7 +141,52 @@ export default function SnowRemovalPage() {
         </div>
       </section>
 
-      <section className="px-5 py-16 sm:px-6 sm:py-20">
+      {/* FAQ — the array rendered here is EXACTLY the array in the FAQPage schema below. */}
+      <section className="border-t-2 border-paper/10 px-5 py-16 sm:px-6 sm:py-20">
+        <div className="mx-auto max-w-3xl">
+          <h2 className="text-display-sm sm:text-display-md">Snow questions</h2>
+          <Faq items={pageFaqs} />
+        </div>
+      </section>
+
+      {/* Second stock scene (the third, snowfall-street, carries the `/` chooser panel),
+          kept between FAQ and the cross-links so the page does not end on a wall of type. */}
+      <section className="border-y-2 border-paper/10">
+        <div className="max-h-[44vh] overflow-hidden">
+          <Photo
+            photoKey="stock-snow-02-entry-steps"
+            sizes="100vw"
+            className="block w-full object-cover"
+          />
+        </div>
+      </section>
+
+      {/* Cross-links into the junk division — same pattern as lib/service-page.tsx. */}
+      {related.length > 0 ? (
+        <section className="px-5 py-14 sm:px-6 sm:py-16">
+          <div className="mx-auto max-w-6xl">
+            <h2 className="text-display-sm">The rest of the year</h2>
+            <ul className="mt-8 grid gap-px border-2 border-paper/10 bg-paper/10 sm:grid-cols-3">
+              {related.map((r) => (
+                <li key={r.slug} className="bg-ink">
+                  <Link
+                    href={`/${r.slug}`}
+                    className="group flex h-full items-center justify-between gap-4 p-6 transition-colors hover:bg-surface"
+                  >
+                    <span className="font-display text-xl uppercase text-paper">{r.title}</span>
+                    <ArrowRight
+                      className="h-5 w-5 shrink-0 text-accent transition-transform group-hover:translate-x-1"
+                      aria-hidden="true"
+                    />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      ) : null}
+
+      <section className="border-t-2 border-paper/10 bg-surface px-5 py-16 sm:px-6 sm:py-20">
         <div className="mx-auto max-w-3xl">
           <h2 className="text-display-sm sm:text-display-md">Ask about snow</h2>
           <p className="mt-4 text-lg leading-relaxed text-paper/70">
@@ -115,6 +198,9 @@ export default function SnowRemovalPage() {
         </div>
       </section>
 
+      <CtaBand />
+
+      <JsonLd data={faqSchema(pageFaqs)} />
       <JsonLd
         data={serviceSchema({
           name: "Snow Removal",

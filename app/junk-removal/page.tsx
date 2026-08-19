@@ -30,26 +30,39 @@ export default function JunkRemovalPage() {
     <main>
       {/* ---- Hero ------------------------------------------------------------ */}
       <section className="border-b-2 border-paper/10">
-        <div className="mx-auto max-w-6xl px-5 pt-14 sm:px-6 sm:pt-20">
-          <h1 className="text-display-sm sm:text-display-lg lg:text-display-xl">{hero.h1}</h1>
-          <p className="mt-6 max-w-xl text-lg leading-relaxed text-paper/70 sm:text-xl">
-            {hero.sub}
-          </p>
-          <p className="mt-6 font-display text-2xl uppercase text-accent sm:text-3xl">
-            {business.tagline}
-          </p>
+        <div className="mx-auto grid max-w-6xl items-start gap-10 px-5 pt-14 sm:px-6 sm:pt-20 lg:grid-cols-[1fr_auto]">
+          <div>
+            <h1 className="text-display-sm sm:text-display-lg lg:text-display-xl">{hero.h1}</h1>
+            <p className="mt-6 max-w-xl text-lg leading-relaxed text-paper/70 sm:text-xl">
+              {hero.sub}
+            </p>
+            <p className="mt-6 font-display text-2xl uppercase text-accent sm:text-3xl">
+              {business.tagline}
+            </p>
 
-          {/* Tappable inside the first screen at 390px. */}
-          <div className="mt-9 grid gap-3 sm:max-w-lg sm:grid-cols-2">
-            <TelLink className="btn-accent px-6 py-4 text-xl">
-              <Phone className="h-5 w-5" strokeWidth={2.5} aria-hidden="true" />
-              {business.phoneDisplay}
-            </TelLink>
-            <SmsLink className="btn-outline px-6 py-4 text-xl">
-              <MessageSquare className="h-5 w-5" strokeWidth={2.5} aria-hidden="true" />
-              Text for a quote
-            </SmsLink>
+            {/* Tappable inside the first screen at 390px. */}
+            <div className="mt-9 grid gap-3 sm:max-w-lg sm:grid-cols-2">
+              <TelLink className="btn-accent px-6 py-4 text-xl">
+                <Phone className="h-5 w-5" strokeWidth={2.5} aria-hidden="true" />
+                {business.phoneDisplay}
+              </TelLink>
+              <SmsLink className="btn-outline px-6 py-4 text-xl">
+                <MessageSquare className="h-5 w-5" strokeWidth={2.5} aria-hidden="true" />
+                Text for a quote
+              </SmsLink>
+            </div>
           </div>
+
+          {/* The brand mark beside the H1 — transparent on the sampled-black base, so it
+              sits in the composition rather than in a box. lg+ only: below that width the
+              hero column needs the full measure and the header mark is already large. */}
+          <img
+            src="/photos/logo-just-junk-it.webp"
+            alt=""
+            width={816}
+            height={512}
+            className="hidden h-56 w-auto self-center lg:block"
+          />
         </div>
 
         {/* Full-bleed band, not a card. */}

@@ -13,7 +13,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/junk-removal", priority: 0.9 },
     { path: "/snow-removal", priority: 0.8 },
     ...site.services
-      .filter((s) => s.slug !== "junk-removal") // its page IS /junk-removal, already listed
+      // Both division homes are already listed explicitly above.
+      .filter((s) => s.slug !== "junk-removal" && s.slug !== "snow-removal")
       .map((s) => ({ path: `/${s.slug}`, priority: 0.8 })),
     { path: "/gallery", priority: 0.6 },
     { path: "/reviews", priority: 0.6 },
