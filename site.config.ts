@@ -277,6 +277,17 @@ export const site = {
       "Call or text and talk to Trystan, the guy who actually shows up. Tell him what you have and where it is, and you get a straight answer.",
   },
 
+  /**
+   * The `/` chooser hero. Its H1 names BOTH services and the city (Aug 2026 refinement —
+   * the old brand-name H1 carried zero search signal; nobody in Grand Rapids searches
+   * "Just Junk It"). The division pages still own their single-service keywords:
+   * /junk-removal targets "junk removal grand rapids" alone, this dual-service H1 does
+   * not compete with it head-on. The meta title in seo.pages.home stays brand-led.
+   */
+  chooser: {
+    h1: `Junk Removal & Snow Removal in ${GEO_LEAD}, MN`,
+  },
+
   hero: {
     /** H1. Names the service and the city. */
     h1: `Junk Removal in ${GEO_LEAD}, MN`,

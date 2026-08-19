@@ -35,15 +35,23 @@
     NEVER flip this to text-ink: black on this red is 3.37:1 and fails for button labels.
     Min height 56px clears the 44px touch target with room for gloves.
   */
+  /* Pressed state is a slight scale-down + darker fill: most traffic is thumbs, and a
+     tap needs feedback the finger can see the moment it lands. Transform + color only —
+     nothing here can reflow layout. touch-action removes the legacy 300ms tap delay.
+     The global prefers-reduced-motion rule below zeroes the transition durations. */
   .btn-accent {
     @apply inline-flex min-h-[56px] items-center justify-center gap-2.5 bg-accent
-           font-display uppercase tracking-wide text-paper transition-colors
-           hover:bg-accent/90 active:bg-accent/80;
+           font-display uppercase tracking-wide text-paper
+           transition-[background-color,transform] duration-150 ease-out
+           hover:bg-accent/90 active:scale-[0.98] active:bg-accent/80;
+    touch-action: manipulation;
   }
   .btn-outline {
     @apply inline-flex min-h-[56px] items-center justify-center gap-2.5 border-2
            border-paper/30 bg-transparent font-display uppercase tracking-wide
-           text-paper transition-colors hover:border-paper/60;
+           text-paper transition-[border-color,transform] duration-150 ease-out
+           hover:border-paper/60 active:scale-[0.98] active:border-paper/70;
+    touch-action: manipulation;
   }
   /* Bottom bar is fixed on every page; this keeps content clear of it. */
   .page-shell {

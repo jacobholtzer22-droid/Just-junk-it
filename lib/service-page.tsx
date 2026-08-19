@@ -166,7 +166,7 @@ export default function ServicePage({ slug }: { slug: string }) {
             <ul className="mt-8 grid gap-px border-2 border-paper/10 bg-paper/10 sm:grid-cols-3">
               {related.map((r) => (
                 <li key={r.slug} className="bg-ink">
-                  <Link href={`/${r.slug}`} className="group flex h-full items-center justify-between gap-4 p-6 transition-colors hover:bg-surface">
+                  <Link href={`/${r.slug}`} className="group flex h-full items-center justify-between gap-4 p-6 transition-[background-color,transform] duration-200 ease-out hover:-translate-y-0.5 hover:bg-surface active:translate-y-0">
                     <span className="font-display text-xl uppercase text-paper">{r.title}</span>
                     <ArrowRight className="h-5 w-5 shrink-0 text-accent transition-transform group-hover:translate-x-1" aria-hidden="true" />
                   </Link>

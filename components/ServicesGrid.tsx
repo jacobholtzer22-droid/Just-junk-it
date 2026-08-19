@@ -25,7 +25,7 @@ export default function ServicesGrid() {
           <li key={s.slug} className="bg-ink">
             <Link
               href={`/${s.slug}`}
-              className="group flex h-full min-h-[168px] flex-col justify-between gap-4 p-6 transition-colors hover:bg-surface"
+              className="group flex h-full min-h-[168px] flex-col justify-between gap-4 p-6 transition-[background-color,transform] duration-200 ease-out hover:-translate-y-0.5 hover:bg-surface active:translate-y-0"
             >
               <Icon className="h-8 w-8 text-accent" strokeWidth={1.75} aria-hidden="true" />
               <div>

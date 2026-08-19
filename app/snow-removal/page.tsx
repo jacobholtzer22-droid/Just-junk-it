@@ -171,7 +171,7 @@ export default function SnowRemovalPage() {
                 <li key={r.slug} className="bg-ink">
                   <Link
                     href={`/${r.slug}`}
-                    className="group flex h-full items-center justify-between gap-4 p-6 transition-colors hover:bg-surface"
+                    className="group flex h-full items-center justify-between gap-4 p-6 transition-[background-color,transform] duration-200 ease-out hover:-translate-y-0.5 hover:bg-surface active:translate-y-0"
                   >
                     <span className="font-display text-xl uppercase text-paper">{r.title}</span>
                     <ArrowRight

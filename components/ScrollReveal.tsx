@@ -33,6 +33,11 @@ export default function ScrollReveal({
 
     const el = ref.current;
     if (!el) return;
+
+    // Anything already in (or near) the viewport at mount renders STATIC — content above
+    // the fold must never animate on load, and the LCP must never wait on a reveal.
+    if (el.getBoundingClientRect().top < window.innerHeight * 0.98) return;
+
     setShown(false);
 
     const io = new IntersectionObserver(
@@ -52,8 +57,8 @@ export default function ScrollReveal({
     <div
       ref={ref}
       style={{ transitionDelay: shown ? `${delay}ms` : "0ms" }}
-      className={`transition-[opacity,transform] duration-[600ms] ease-out motion-reduce:transition-none ${
-        shown ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
+      className={`transition-[opacity,transform] duration-[350ms] ease-out motion-reduce:transition-none ${
+        shown ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
       } ${className}`}
     >
       {children}

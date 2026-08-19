@@ -6,59 +6,53 @@ import TelLink from "./TelLink";
 /**
  * Site header with a real mobile menu — not a desktop nav that wraps.
  *
+ * SIZING (Aug 2026 refinement): fixed bar heights — h-16 (64px) mobile, h-[76px]
+ * desktop — with everything vertically centered against them. The logo is the only
+ * brand mark: the lockup contains the wordmark, so there is no "Just Junk It" text
+ * beside it (the home link's accessible name is its aria-label). Nav items and the
+ * phone button are text-base with `whitespace-nowrap`, sized so every item holds one
+ * line at 1280px with comfortable gaps — wrapping is impossible, not just unlikely.
+ *
  * The menu is a native <details>/<summary> disclosure. That is deliberate: it opens and
  * closes with zero JavaScript, so it still works on a slow connection before hydration and
  * on a page that fails to hydrate at all. It is also keyboard operable and announced
  * correctly by screen readers for free, which a div-and-onClick menu is not.
- *
- * The summary is a 56px target, well clear of the 44px minimum.
  */
 export default function Header() {
   const { business, nav } = site;
   return (
     <header className="border-b-2 border-paper/10 bg-ink">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-4 sm:px-6">
-        {/*
-          Logo image + text wordmark together. The image is DECORATIVE (empty alt): the
-          accessible name is the wordmark span right beside it, so screen readers hear
-          "Just Junk It" once, not twice. Real width/height attrs -> zero layout shift.
-
-          AUG 2026: the logo grew to h-16/h-20 so it anchors the bar instead of sitting
-          small beside the menu toggle — and at that size the lockup's own banner
-          lettering carries the name, so the text wordmark is sr-only except on `lg`,
-          where the bar has room for it on one line. Below that, logo + wordmark + nav
-          (or the 320px toggle row) either overflow or force the brand name to wrap.
-        */}
-        <Link
-          href="/"
-          aria-label="Just Junk It — home"
-          className="-my-2 flex min-h-[44px] items-center gap-3 py-2 font-display text-2xl uppercase leading-none tracking-tight text-paper sm:text-3xl"
-        >
+      {/* Explicit px heights: the site's 17px rem base makes h-16 render 68px, so the
+          64/76px targets are stated literally. Bar totals include the 2px bottom border. */}
+      <div className="mx-auto flex h-[62px] max-w-6xl items-center justify-between gap-4 px-5 sm:px-6 md:h-[74px]">
+        <Link href="/" aria-label="Just Junk It — home" className="flex items-center">
+          {/* Decorative (aria-label above carries the name). Real dims -> no layout shift. */}
           <img
             src="/photos/logo-just-junk-it.webp"
             alt=""
             width={816}
             height={512}
-            className="h-16 w-auto sm:h-20"
+            className="h-[44px] w-auto md:h-[52px]"
           />
-          {/* Purely visual (the link's aria-label is the accessible name). */}
-          <span className="hidden whitespace-nowrap lg:inline" aria-hidden="true">
-            Just Junk It
-          </span>
         </Link>
 
-        {/* Desktop nav */}
-        <nav className="hidden md:block" aria-label="Main">
-          <ul className="flex items-center gap-7">
+        {/* Desktop nav — lg+ only: at 768-1023px the full item set + phone button
+            cannot hold one line without crowding the logo, so tablets get the same
+            disclosure menu as phones. Every item nowrap: one line by construction. */}
+        <nav className="hidden lg:block" aria-label="Main">
+          <ul className="flex items-center gap-5 lg:gap-6">
             {nav.map((n) => (
               <li key={n.href}>
-                <Link href={n.href} className="flex min-h-[44px] items-center font-display text-lg uppercase tracking-wide text-paper/75 hover:text-paper">
+                <Link
+                  href={n.href}
+                  className="flex min-h-[44px] items-center whitespace-nowrap font-display text-base uppercase tracking-normal text-paper/75 transition-colors duration-150 hover:text-paper"
+                >
                   {n.label}
                 </Link>
               </li>
             ))}
             <li>
-              <TelLink className="btn-accent px-5 py-3 text-lg">
+              <TelLink className="btn-accent whitespace-nowrap px-4 py-2.5 text-base">
                 <Phone className="h-4 w-4" strokeWidth={2.5} aria-hidden="true" />
                 {business.phoneDisplay}
               </TelLink>
@@ -66,10 +60,10 @@ export default function Header() {
           </ul>
         </nav>
 
-        {/* Mobile menu — no JS required */}
-        <details className="group relative md:hidden">
-          <summary className="flex h-14 w-14 cursor-pointer list-none items-center justify-center border-2 border-paper/25 text-paper [&::-webkit-details-marker]:hidden">
-            <Menu className="h-7 w-7" aria-hidden="true" />
+        {/* Mobile menu — no JS required. 48x48 target (min is 44). */}
+        <details className="group relative lg:hidden">
+          <summary className="flex h-[48px] w-[48px] cursor-pointer list-none items-center justify-center border-2 border-paper/25 text-paper [&::-webkit-details-marker]:hidden">
+            <Menu className="h-6 w-6" aria-hidden="true" />
             <span className="sr-only">Open menu</span>
           </summary>
           <nav
@@ -81,7 +75,7 @@ export default function Header() {
                 <li key={n.href}>
                   <Link
                     href={n.href}
-                    className="block px-4 py-4 font-display text-xl uppercase tracking-wide text-paper hover:bg-paper/10"
+                    className="block px-4 py-4 font-display text-xl uppercase tracking-wide text-paper active:bg-paper/10"
                   >
                     {n.label}
                   </Link>
