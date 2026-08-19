@@ -32,8 +32,14 @@ export function serviceMetadata(slug: string): Metadata {
       siteName: site.seo.siteName,
       type: "website",
       locale: "en_US",
+      images: [{ url: "/photos/logo-just-junk-it-og.png", width: 1200, height: 630, alt: "Just Junk It logo" }],
     },
-    twitter: { card: "summary_large_image", title: s.metaTitle, description: s.metaDescription },
+    twitter: {
+      card: "summary_large_image",
+      title: s.metaTitle,
+      description: s.metaDescription,
+      images: ["/photos/logo-just-junk-it-og.png"],
+    },
   };
 }
 
