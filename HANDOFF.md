@@ -178,8 +178,8 @@ with a camera on site, replace all three:**
 
 | File (all in `public/photos/`, AVIF + WebP + 800px variants) | Where it appears |
 |---|---|
-| `stock-snow-01-driveway-pines.*` | `/snow-removal` hero photo band |
-| `stock-snow-02-entry-steps.*` | `/snow-removal` band between FAQ and cross-links |
+| `stock-snow-01-driveway-pines.*` | `/snow-removal` photo pair below the hero (left) |
+| `stock-snow-02-entry-steps.*` | `/snow-removal` photo pair below the hero (right) |
 | `stock-snow-03-snowfall-street.*` | The snow division panel on `/` (the chooser) |
 
 To swap: drop the real photos into `Stock Photos/`'s place in

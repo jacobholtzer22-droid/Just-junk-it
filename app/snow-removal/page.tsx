@@ -84,14 +84,25 @@ export default function SnowRemovalPage() {
         </div>
       </section>
 
-      {/* Full-bleed winter band. STOCK scene (see the header comment) — no crew, no rig. */}
-      <section className="border-b-2 border-paper/10">
-        <div className="max-h-[52vh] overflow-hidden">
-          <Photo
-            photoKey="stock-snow-01-driveway-pines"
-            sizes="100vw"
-            className="block w-full object-cover"
-          />
+      {/* Winter scenes — STOCK (see the header comment), no crew, no rig. Shown as a
+          contained side-by-side pair at (near-)native portrait aspect, NOT as full-bleed
+          bands: both sources are 2:3-or-taller portraits, and a short wide band clipped
+          them to a ~20% slice that read as an unreadable zoomed smudge. aspect-[2/3] is
+          exactly native for the driveway shot and a mild trim for the steps shot. */}
+      <section className="border-b-2 border-paper/10 px-5 py-16 sm:px-6 sm:py-20">
+        <div className="mx-auto grid max-w-4xl grid-cols-1 gap-8 sm:grid-cols-2">
+          {[
+            "stock-snow-01-driveway-pines",
+            "stock-snow-02-entry-steps",
+          ].map((key) => (
+            <figure key={key} className="border-2 border-paper/10 bg-surface">
+              <Photo
+                photoKey={key}
+                sizes="(min-width: 640px) 50vw, 100vw"
+                className="block aspect-[2/3] w-full object-cover"
+              />
+            </figure>
+          ))}
         </div>
       </section>
 
@@ -146,18 +157,6 @@ export default function SnowRemovalPage() {
         <div className="mx-auto max-w-3xl">
           <h2 className="text-display-sm sm:text-display-md">Snow questions</h2>
           <Faq items={pageFaqs} />
-        </div>
-      </section>
-
-      {/* Second stock scene (the third, snowfall-street, carries the `/` chooser panel),
-          kept between FAQ and the cross-links so the page does not end on a wall of type. */}
-      <section className="border-y-2 border-paper/10">
-        <div className="max-h-[44vh] overflow-hidden">
-          <Photo
-            photoKey="stock-snow-02-entry-steps"
-            sizes="100vw"
-            className="block w-full object-cover"
-          />
         </div>
       </section>
 
