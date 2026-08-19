@@ -295,8 +295,14 @@ export const site = {
     /**
      * Key into lib/photo-manifest.ts. Alt text lives there with the verified copy, so a
      * page cannot quietly re-describe a photo as something it does not show.
+     *
+     * Swapped from truck-01 (Aug 2026): that crop is the truck in deep shadow behind
+     * birch trunks — soft, dark, and unreadable as a full-bleed hero, and no wider crop
+     * of its source frame helps (the truck is a corner speck in the full frame). The
+     * packed carport is daylight-lit and reads as "junk job" instantly. Replace with a
+     * clean daylight rig shot when Trystan supplies one — HANDOFF.md photo request #5.
      */
-    photoKey: "truck-01-dump-trailer-grand-rapids",
+    photoKey: "job-03-carport-packed-full",
   },
 
   /** Three-second trust strip. Nothing here may be a claim we cannot back. */

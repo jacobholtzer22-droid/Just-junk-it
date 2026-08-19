@@ -65,15 +65,19 @@ export default function JunkRemovalPage() {
           />
         </div>
 
-        {/* Full-bleed band, not a card. */}
-        <div className="mt-12 max-h-[52vh] overflow-hidden sm:max-h-[60vh]">
+        {/* Full-bleed band, not a card. FIXED height (not max-h + clip): with a clip the
+            visible strip was whatever the TOP of the image happened to be — for the
+            near-square carport photo that meant roof fabric with the junk pile cut off.
+            A fixed-height box + object-cover with a low-biased position keeps the
+            subject (the pile) in frame at every width. */}
+        <div className="mt-12 h-[52vh] sm:h-[60vh]">
           {/* NOT `priority`. Measured LCP on this page is the H1 text waiting on the
               Anton webfont, not this image. Eager-loading a non-LCP hero at high priority
               just takes bandwidth from the thing that actually gates the largest paint. */}
           <Photo
             photoKey={hero.photoKey}
             sizes="100vw"
-            className="block w-full object-cover"
+            className="block h-full w-full object-cover object-[50%_72%]"
           />
         </div>
       </section>
