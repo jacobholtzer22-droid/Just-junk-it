@@ -54,7 +54,11 @@ export default function ContactForm() {
   const [address, setAddress] = useState("");
   const [message, setMessage] = useState("");
   const [smsConsent, setSmsConsent] = useState(false); // real checkbox, never auto-true
-  const [company, setCompany] = useState(""); // honeypot — humans never see this
+  // Honeypot — humans never see this. Deliberately gibberish name: it was `company`,
+  // and Chrome's autofill (which ignores autoComplete="off" for address data) filled it
+  // for real visitors, tripping the short-circuit below and silently dropping the lead.
+  // Proven with headless A/B runs against production, Aug 2026.
+  const [hp_7d3a_ref, setHp_7d3a_ref] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [touched, setTouched] = useState(false);
 
@@ -70,7 +74,8 @@ export default function ContactForm() {
 
     // Honeypot. A bot fills every field it finds; a human cannot see this one.
     // Show the normal success screen so the bot learns nothing, and send nothing.
-    if (company.trim().length > 0) {
+    if (hp_7d3a_ref.trim().length > 0) {
+      console.warn("[JJI] honeypot tripped");
       setStatus("success");
       return;
     }
@@ -252,20 +257,30 @@ export default function ContactForm() {
       </div>
 
       {/*
-        Honeypot. Hidden from sighted users, from screen readers (aria-hidden), and from
-        the keyboard (tabIndex -1). Never rendered with display:none, which some bots
-        detect and skip. Checked locally; never added to the POST body.
+        Honeypot — REWORKED Aug 2026 after it ate real leads. The old version was
+        name="company" with a visible-to-parsers "Company" label, positioned off-screen.
+        Chrome's autofill classifies fields by name/label/placeholder and IGNORES
+        autoComplete="off" for address-book data — so when a real visitor autofilled
+        their name and phone, Chrome also filled "company", tripping the short-circuit
+        in handleSubmit and silently discarding the lead (fake success, no POST —
+        proven with headless A/B runs against production).
+
+        Now: gibberish name that matches no autofill token, NO label / placeholder /
+        aria-label (autofill classifies on all of them), and hidden with display:none
+        on the wrapper — Chrome will autofill focusable off-screen fields but skips
+        display:none, while DOM-walking bots still find and fill the input. Checked
+        locally in handleSubmit; never added to the POST body.
       */}
-      <div className="absolute left-[-9999px] top-0 h-px w-px overflow-hidden" aria-hidden="true">
-        <label htmlFor="company">Company (leave this field empty)</label>
+      <div className="hidden" aria-hidden="true">
         <input
-          id="company"
-          name="company"
+          id="hp_7d3a_ref"
+          name="hp_7d3a_ref"
           type="text"
           tabIndex={-1}
           autoComplete="off"
-          value={company}
-          onChange={(e) => setCompany(e.target.value)}
+          aria-hidden="true"
+          value={hp_7d3a_ref}
+          onChange={(e) => setHp_7d3a_ref(e.target.value)}
         />
       </div>
 
