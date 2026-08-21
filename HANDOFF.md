@@ -235,22 +235,46 @@ it is. That is honest but weak. One message to Trystan covers all of it:
 
 ---
 
-## Google Ads tracking — fill in after the account exists
+## Google Ads conversion tracking — ✅ LIVE as of Aug 21, 2026
 
-Blank IDs, events wired and inert. Unlike the CRM slug these do **not** fail the build —
-ads legitimately come after launch.
+**Tag: `AW-18397156416`. Google Ads account: `6467984739`.**
 
-In [`site.config.ts`](site.config.ts) → `ads`:
+All values live in ONE place — [`site.config.ts`](site.config.ts) → `ads`. Nothing else
+in the repo hardcodes the tag or a label; every consumer reads it from there.
 
-| Field | Fill with | Fires on |
-|---|---|---|
-| `tagId` | `AW-XXXXXXXXX` | — |
-| `conversions.contact` | conversion label | quote-form success |
-| `conversions.call` | conversion label | any `tel:` tap |
-| `conversions.text` | conversion label | any `sms:` tap |
+| Conversion action | Action ID | Label (`ads.conversions.*`) | Fires from | On exactly what |
+|---|---|---|---|---|
+| **Quote Form Submit** | `7729084780` | `contact` = `13bECOzyweUcEMCoucRE` | [`components/ContactForm.tsx`](components/ContactForm.tsx) | `res.ok` from the POST to `/api/contact` — inside `try`, after the status check, never in `catch`/`finally` |
+| **Click to Call** | `7728860117` | `call` = `aLZJCNWXtOUcEMCoucRE` | [`components/TelLink.tsx`](components/TelLink.tsx) → `TelLink` | `onClick` of any `tel:` link (12 render sites: header, footer, CTA band, sticky mobile bar, hero buttons, service pages) |
+| **Click to Text** | `7728860105` | `text` = `QjNZCMmXtOUcEMCoucRE` | [`components/TelLink.tsx`](components/TelLink.tsx) → `SmsLink` | `onClick` of any `sms:` link (8 render sites) |
+| **Calls from ads** | `7729044474` | *(none — `AD_CALL`)* | Google call asset | Handled entirely inside the Ads account. **No site tag involvement — do not wire this one on the site.** |
 
-Nothing renders and nothing fires until `tagId` matches `/^AW-/`. Config bakes in at
-build time, so **redeploy without cache** after filling these.
+**How it works.** [`components/Analytics.tsx`](components/Analytics.tsx) renders the two
+`next/script` tags (`gtag/js` + init, both `strategy="afterInteractive"`) and exports
+`fireConversion(label)`. Both are gated on `adsEnabled = /^AW-/.test(site.ads.tagId)`, so
+a blank tag id renders nothing and fires nothing — that is why these events could sit in
+the code inert from the first build and needed only the four values to go live.
+`fireConversion` composes `send_to` as `` `${tagId}/${label}` `` itself, so
+**`ads.conversions.*` holds the LABEL ONLY**, never the full `AW-xxx/label` string.
+
+There is exactly one `gtag` load and one `config` hit sitewide. There are **zero** raw
+`href="tel:"` / `href="sms:"` anchors — every one goes through `TelLink`/`SmsLink`, which
+is what makes the click conversions impossible to forget on a new button.
+
+⚠️ **Config bakes in at BUILD time. After any change here, redeploy WITHOUT build cache**
+or the previous values stay in the bundle.
+
+### How to verify (do this after deploying)
+
+1. `tagassistant.google.com` → connect `www.justjunkitmn.com`. On page load: `AW-18397156416`
+   appears with a **config** hit and **no** conversion event.
+2. Tap a `tel:` link → exactly **one** conversion, label `aLZJCNWXtOUcEMCoucRE`.
+3. Tap an `sms:` link → exactly **one** conversion, label `QjNZCMmXtOUcEMCoucRE`.
+4. Submit the quote form → one conversion, label `13bECOzyweUcEMCoucRE`, **and** the lead
+   appears in the A&A dashboard under `just-junk-it`. ⚠️ `/api/contact` returns 200 even
+   for a slug matching no Business row, so **the dashboard is the real test, not the tag.**
+5. Google Ads → Goals → Conversions: each web action moves off **Unverified** within
+   24–48 h of its first real event. "Calls from ads" is driven by the call asset, not the site.
 
 ---
 

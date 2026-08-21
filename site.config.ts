@@ -889,18 +889,27 @@ export const site = {
 
   ads: {
     /**
-     * Blank until the Ads account exists. Unlike the CRM slug this does NOT fail the
-     * build — ads legitimately come after launch. Events are wired and inert.
-     * Config bakes in at BUILD time: after filling these, redeploy WITHOUT build cache.
+     * LIVE as of Aug 21, 2026 — Google Ads account 6467984739.
+     *
+     * Filling these switched the whole tracking path on: components/Analytics.tsx only
+     * renders the gtag scripts when tagId matches /^AW-/, and fireConversion() no-ops
+     * until then. Nothing else had to change — the three events were wired inert from
+     * the first build.
+     *
+     * ⚠ Config bakes in at BUILD time. After ANY change here, redeploy WITHOUT build
+     * cache or the old values stay in the bundle.
+     *
+     * ⚠ Labels are the conversion LABEL only — never the full "AW-xxx/label" string.
+     * fireConversion() composes `${tagId}/${label}` itself.
      */
-    tagId: "",
+    tagId: "AW-18397156416",
     conversions: {
-      /** Quote-form submission. */
-      contact: "",
-      /** Tap on any tel: link. */
-      call: "",
-      /** Tap on any sms: link. */
-      text: "",
+      /** Quote Form Submit (action 7729084780). Fired by ContactForm on res.ok. */
+      contact: "13bECOzyweUcEMCoucRE",
+      /** Click to Call (action 7728860117). Fired by TelLink on any tel: tap. */
+      call: "aLZJCNWXtOUcEMCoucRE",
+      /** Click to Text (action 7728860105). Fired by SmsLink on any sms: tap. */
+      text: "QjNZCMmXtOUcEMCoucRE",
     },
   },
 
