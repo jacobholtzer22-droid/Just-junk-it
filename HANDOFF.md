@@ -168,6 +168,29 @@ QUESTIONS below. When Trystan answers, the copy slots in without a redesign.
 - What equipment does he run (only if he wants it mentioned)?
 - Pricing structure he wants stated publicly, if any (page currently says free quotes only)?
 
+## SMALL BUILDING DEMOLITION — live Aug 2026, scope deliberately narrow
+
+`/small-building-demolition` is live: trailer houses, old garages, cabins, small
+outbuildings, debris hauled off. Cross-linked from Construction Debris Removal and Hot
+Tub & Shed Removal, in the services grid, footer and sitemap, with Service schema.
+
+**Everything on that page comes from one sentence of confirmed scope** ("trailer house
+demolition, old garage, or cabin, and he can demolish small buildings"). The page makes
+no claim about how the work is done, and "small buildings" stays in the copy as the
+honest ceiling.
+
+### CLIENT QUESTIONS — demolition, before this page gets paid traffic
+
+- Who pulls the demolition permit — him or the property owner?
+- Does he handle utility disconnects (power, gas, water, septic), or must they be done first?
+- **Asbestos / hazmat**: older trailer houses and cabins are a real risk. Does he test, abate, refuse, or subcontract? This one is liability, not marketing.
+- Foundations, slabs and basements: removed, filled, or left in place?
+- Is he licensed and insured for demolition specifically, and does he want that stated?
+- Any size ceiling he wants named (square footage, single-story only)?
+- Residential only, or will he take small commercial outbuildings?
+- Does the price include the haul-off and dump fees, or are those separate?
+- Does he want mobile-home-specific wording ("mobile home", "manufactured home") for search?
+
 ### SWAP AFTER FIRST SNOW — stock images to replace with real job photos
 
 The snow surfaces launched with **three stock images** (the only stock on the site —
@@ -248,7 +271,7 @@ at Phase 4; these are the ones that already exist in config.
 
 | Claim | Source | Needs |
 |---|---|---|
-| **"You get a clear quote before we start. What we quote is what you pay."** | Trystan's own current site, carried over verbatim | ⚠️ **This is a pricing commitment, not a marketing line.** It is an operational promise — no upcharges once a number is given. We did not write it; it is his existing copy. He needs to confirm he actually works this way before it goes on a page that paid traffic lands on. |
+| ~~"What we quote is what you pay."~~ **RESOLVED — REMOVED Aug 2026.** | Trystan's old site | ✅ **He answered, and the answer was no.** His words: *"the quote is a rough idea, you never know until you start the job."* The pricing commitment is gone from the site: the why-us point is now "Upfront Pricing" / "It is an honest estimate — some jobs are bigger than they look until we get into them", and the cost FAQ says "a straight estimate". **Do not reintroduce locked-price language anywhere.** Note Lora Budach's review still says he quotes up front — that is her words about her job and stays verbatim; it is not the same as a no-upcharge promise. |
 | "Same day service available" / "We make it happen when we can" | His current site, verbatim | The hedge "when we can" is load-bearing. It is the difference between availability and a guarantee. Do not let anyone tidy it away. |
 | "We keep it out of landfills when we can" | His current site, verbatim | Same — hedged. Without "when we can" it becomes an environmental claim we cannot substantiate. |
 | "Locally owned, Grand Rapids MN" | His current site + business facts | Confirm |

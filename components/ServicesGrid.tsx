@@ -3,10 +3,10 @@ import { ArrowRight } from "lucide-react";
 import { site } from "@/site.config";
 
 /**
- * The eight services.
+ * The nine junk-side services.
  *
  * Not cards-with-rounded-corners-and-a-drop-shadow. Hard-edged panels on a 2px grid, so
- * the block reads as one dense slab rather than eight floating objects. The accent appears
+ * the block reads as one dense slab rather than nine floating objects. The accent appears
  * only on the arrow, so the eye still knows these are the tappable things.
  *
  * Each panel is a full-height link — the whole rectangle is the target, not just the words.
@@ -14,11 +14,13 @@ import { site } from "@/site.config";
 export default function ServicesGrid() {
   // Snow lives in site.services so the footer and cross-links can resolve it, but it is
   // not something we HAUL — this grid sits under "What we haul" on the junk division
-  // home, so the snow card is filtered out (and 8 junk panels keep the 2x4 grid exact).
+  // home, so the snow card is filtered out. That leaves 9 junk panels, which is why the
+  // large breakpoint is 3 columns and not 4 — 9 fills a 3x3 exactly, where 4 columns
+  // would strand a single card alone on a third row.
   // Snow's front-door placements are the `/` chooser panel and the nav.
   const services = site.services.filter((s) => s.slug !== "snow-removal");
   return (
-    <ul className="mt-10 grid gap-px border-2 border-paper/10 bg-paper/10 sm:grid-cols-2 lg:grid-cols-4">
+    <ul className="mt-10 grid gap-px border-2 border-paper/10 bg-paper/10 sm:grid-cols-2 lg:grid-cols-3">
       {services.map((s) => {
         const Icon = s.icon;
         return (

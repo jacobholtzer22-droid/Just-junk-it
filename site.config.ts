@@ -8,6 +8,7 @@ import {
   Waves,
   Trash2,
   Snowflake,
+  Hammer,
   type LucideIcon,
 } from "lucide-react";
 
@@ -151,7 +152,6 @@ export const site = {
     /** Named by Trystan. Do not add towns he did not name. */
     cities: [
       "Grand Rapids",
-      "Pokegama Lake",
       "Cohasset",
       "Coleraine",
       "Bovey",
@@ -253,7 +253,7 @@ export const site = {
     {
       id: "snow-areas",
       q: "Where do you clear snow?",
-      a: "The same area as the junk side: Grand Rapids and the surrounding Itasca County towns, including Cohasset, Coleraine, Bovey, Deer River, Nashwauk and Pokegama Lake. If your town is not on the list, call anyway and you will get a straight answer.",
+      a: "The same area as the junk side: Grand Rapids and the surrounding Itasca County towns, including Cohasset, Coleraine, Bovey, Deer River and Nashwauk. If your town is not on the list, call anyway and you will get a straight answer.",
     },
     {
       id: "snow-cost",
@@ -336,11 +336,13 @@ export const site = {
       body: "Need it gone today? Call us. We make it happen when we can.",
     },
     {
-      heading: "Upfront Pricing, No Surprises",
-      // ⚠ PRICING COMMITMENT, not a marketing line. This promises no upcharge after a
-      // quote is given. Carried over verbatim from Trystan's own site; on the owner
-      // sign-off list in HANDOFF.md. Do not restate it more strongly.
-      body: "You get a clear quote before we start. What we quote is what you pay.",
+      heading: "Upfront Pricing",
+      // ⚠ CORRECTED AUG 2026 AT TRYSTAN'S REQUEST — do not restore the old wording.
+      // This used to read "Upfront Pricing, No Surprises" / "What we quote is what you
+      // pay", carried over from his old site. He struck that out: "the quote is a rough
+      // idea, you never know until you start the job." It was a pricing commitment he
+      // does not actually make, so it is gone. Say estimate, never a locked price.
+      body: "You get a clear quote before we start. It is an honest estimate — some jobs are bigger than they look until we get into them.",
     },
     {
       heading: "We Recycle & Donate When Possible",
@@ -362,12 +364,12 @@ export const site = {
     {
       step: "1",
       heading: "Call or text",
-      body: `Reach ${PHONE_DISPLAY} directly. Tell us what you have and where it is.`,
+      body: `Reach ${PHONE_DISPLAY} directly. Tell us the what, where, and when.`,
     },
     {
       step: "2",
       heading: "You point, we load",
-      body: "You do not lift anything, move anything, or drag anything to the curb. Show us the pile.",
+      body: "You do not lift, move, or drag anything to the curb. Show us the pile.",
     },
     {
       step: "3",
@@ -565,7 +567,7 @@ export const site = {
         "Clearing a site before the next trade arrives"
       ],
       faqIds: ["cost", "areas", "move-it", "what-we-take"],
-      related: ["garage-cleanouts", "yard-waste-removal", "junk-removal"],
+      related: ["small-building-demolition", "garage-cleanouts", "junk-removal"],
     },
     {
       title: "Hot Tub & Shed Removal",
@@ -592,7 +594,47 @@ export const site = {
         "Clearing the property before it is listed"
       ],
       faqIds: ["cost", "move-it", "areas", "what-we-take"],
-      related: ["yard-waste-removal", "construction-debris-removal", "junk-removal"],
+      related: ["small-building-demolition", "construction-debris-removal", "junk-removal"],
+    },
+    {
+      /**
+       * SMALL BUILDING DEMOLITION (added Aug 2026, Trystan's request via Jacob).
+       *
+       * ⚠ CONFIRMED SCOPE, VERBATIM: "trailer house demolition, old garage, or cabin,
+       * and he can demolish small buildings." That is ALL that is confirmed. Do NOT add
+       * — here or on the page — anything about permits, utility disconnects, asbestos or
+       * hazmat, foundations or slabs, excavation, septic, commercial or multi-story work,
+       * timelines, or equipment. Those are open CLIENT QUESTIONS in HANDOFF.md.
+       *
+       * "Small buildings" is the honest ceiling and it stays in the copy: it is what he
+       * said, and it stops the page reading as a full demolition contractor.
+       */
+      title: "Small Building Demolition",
+      slug: "small-building-demolition",
+      blurb: "Trailer houses, old garages, cabins and small outbuildings — down and hauled off.",
+      icon: Hammer,
+      // TODO PHOTO: no demolition job photo exists. Falls back to the truck, whose alt
+      // text describes the truck and never implies a teardown happened in that frame.
+      photoKey: "truck-01-dump-trailer-grand-rapids",
+      metaTitle: "Small Building Demolition in Grand Rapids, MN",
+      metaDescription: "Trailer house, garage, cabin and small building demolition in Grand Rapids and Itasca County, MN. Torn down and hauled away. Call or text (218) 256-1340.",
+      intro: "Just Junk It takes down small buildings in Grand Rapids and across Itasca County — trailer houses, old garages, cabins and outbuildings that have reached the end. The teardown and the haul-off are the same job: when we leave, the structure and the debris are both gone.",
+      covers: [
+        "Trailer houses and mobile homes",
+        "Old garages and carports",
+        "Cabins and small outbuildings",
+        "Sheds, coops and lean-tos",
+        "Collapsed or storm-damaged structures",
+        "Hauling off all the debris afterward",
+      ],
+      whenYouNeedIt: [
+        "A trailer house on the property that is past saving",
+        "An old garage that is leaning, rotting or unsafe",
+        "A cabin or outbuilding coming down before a rebuild",
+        "Clearing a lot before it is listed or built on",
+      ],
+      faqIds: ["cost", "areas", "same-day", "what-we-take"],
+      related: ["construction-debris-removal", "hot-tub-and-shed-removal", "junk-removal"],
     },
     {
       /**
@@ -625,12 +667,12 @@ export const site = {
     {
       id: "areas",
       q: "What areas do you cover?",
-      a: "Grand Rapids and the surrounding Itasca County area, including Cohasset, Coleraine, Bovey, Marble, Taconite, Pengilly, Nashwauk, Deer River, Bigfork, Hill City, Remer and Pokegama Lake. If your town is not on that list, call anyway and you will get a straight answer.",
+      a: "Grand Rapids and the surrounding Itasca County area, including Cohasset, Coleraine, Bovey, Marble, Taconite, Pengilly, Nashwauk, Deer River, Bigfork, Hill City and Remer. If your town is not on that list, call anyway and you will get a straight answer.",
     },
     {
       id: "cost",
       q: "How much does junk removal cost?",
-      a: "Quotes are free. Tell us what you have and where it is, and you get a clear price before we start. What we quote is what you pay.",
+      a: "Quotes are free. Tell us the what, where and when, and you get a straight estimate before we start.",
     },
     {
       id: "move-it",
