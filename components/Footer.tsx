@@ -89,6 +89,11 @@ export default function Footer() {
                 Privacy
               </Link>
             </li>
+            <li>
+              <a href="#" data-aa-cookie-settings hidden className="-mx-2 flex min-h-[44px] items-center px-2 text-paper/75 hover:text-paper">
+                Cookie settings
+              </a>
+            </li>
           </ul>
           {/* Only real profiles render — empty config entries are skipped entirely. */}
           <ul className="mt-3 flex gap-5">
