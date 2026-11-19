@@ -61,6 +61,9 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${display.variable} ${body.variable}`}>
+      <head>
+        <script defer src="https://www.alignandacquire.com/t/s/just-junk-it.js"></script>
+      </head>
       <body className="page-shell">
         <Header />
         {children}

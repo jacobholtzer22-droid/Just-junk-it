@@ -42,7 +42,14 @@ export default function PrivacyPage() {
         <p>
           Form submissions are handled by Align and Acquire, which builds and runs this site
           and its customer records. The site is hosted by Vercel, which keeps standard server
-          logs. There is no advertising or analytics tracking running on this site at present.
+          logs.
+        </p>
+        <h2 className="pt-4 text-2xl text-paper">Cookies and analytics</h2>
+        <p>
+          We count visits to this site without cookies: we log the page viewed, the site that linked here, ad campaign tags and an approximate location (country, region and city), and we never store your IP address.
+        </p>
+        <p>
+          If you click OK on the cookie banner, we also use PostHog to record how you use this site (clicks, scrolling and a replay of your visit, with anything you type hidden); you can change your choice at any time with the Cookie settings link at the bottom of every page, and if your browser sends a Global Privacy Control signal we leave this off.
         </p>
         <h2 className="pt-4 text-2xl text-paper">Getting your information removed</h2>
         <p>
